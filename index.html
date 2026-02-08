@@ -2,27 +2,126 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Mercado Cafunfo</title>
-  <link rel="stylesheet" href="css/style.css">
+
+  <!-- ESSENCIAL pra mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Magia App</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      color: #38bdf8;
+    }
+
+    header p {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-top: 5px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #e5e7eb;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #38bdf8;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 20px;
+    }
+
+    /* Ajuste extra pra telas muito pequenas */
+    @media (max-width: 360px) {
+      header h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <h1>🛒 Mercado Cafunfo</h1>
-  <p>Compre e venda perto de você em Cafunfo</p>
-</header>
+  <div class="container">
+    <header>
+      <h1>✨ Magia App</h1>
+      <p>Versão Mobile Ativa</p>
+    </header>
 
-<nav>
-  <a href="index.html">Início</a>
-  <a href="vendedores.html">Vendedores</a>
-  <a href="cadastrar.html">Cadastrar Loja</a>
-</nav>
+    <div class="card">
+      <h2>📱 Mobile First</h2>
+      <p>Este layout foi feito especialmente para celulares Android.</p>
+    </div>
 
-<main>
-  <button onclick="pegarLocalizacao()">📍 Usar minha localização</button>
-  <p id="localizacao"></p>
-</main>
+    <div class="card">
+      <h2>⚡ Rápido e leve</h2>
+      <p>Funciona bem até em telefones fracos como Tecno Spark.</p>
+    </div>
 
-<script src="js/location.js"></script>
+    <button onclick="alert('Tá funcionando em versão mobile 😎')">
+      Testar App
+    </button>
+
+    <footer>
+      © 2026 - Magia App
+    </footer>
+  </div>
+
 </body>
 </html>
