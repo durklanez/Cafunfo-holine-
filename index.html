@@ -1,21 +1,140 @@
-<main>
-  <div class="card">
-    <h3>📍 Sua localização</h3>
-    <p id="localizacao">
-      Para ver o que está à venda perto de você, permita a localização.
-    </p>
-    <button onclick="pegarLocalizacao()">Usar minha localização</button>
-  </div>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Mercado Cafunfo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Lojas (começa escondido) -->
-  <div id="lojas" style="display:none;">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+    }
+
+    header {
+      background: #1677ff;
+      color: white;
+      padding: 25px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-location {
+      background: #1677ff;
+      color: white;
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOPO -->
+  <header>
+    <h1>🛒 Mercado Cafunfo</h1>
+    <p>Compre e venda perto de você em Cafunfo</p>
+  </header>
+
+  <div class="container">
+
+    <!-- LOCALIZAÇÃO -->
     <div class="card">
+      <h3>📍 Sua localização</h3>
+      <p id="localizacao">Permita a localização para ver produtos próximos.</p>
+      <button class="btn btn-location" onclick="pegarLocalizacao()">
+        Usar minha localização
+      </button>
+    </div>
+
+    <!-- LOJA (ESCONDIDA ATÉ PERMITIR LOCALIZAÇÃO) -->
+    <div class="card" id="lojaCard" style="display:none;">
       <h3>🏪 Loja Exemplo</h3>
-      <p>Produto: Arroz 25kg</p>
+      <p><strong>Produto:</strong> Arroz 25kg</p>
       <p>📌 Bairro: Cafunfo Centro</p>
       <a href="https://wa.me/244923000000" target="_blank">
-        <button class="whatsapp">Comprar no WhatsApp</button>
+        <button class="btn btn-whatsapp">Comprar no WhatsApp</button>
       </a>
     </div>
+
   </div>
-</main>
+
+  <!-- RODAPÉ -->
+  <footer>
+    © 2026 - Mercado Cafunfo | Lunda Norte - Angola
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    function pegarLocalizacao() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            document.getElementById("localizacao").innerText =
+              "Latitude: " + pos.coords.latitude.toFixed(4) +
+              " | Longitude: " + pos.coords.longitude.toFixed(4);
+
+            // Mostrar lojas após permitir localização
+            document.getElementById("lojaCard").style.display = "block";
+          },
+          function() {
+            document.getElementById("localizacao").innerText =
+              "Permissão negada. Ative a localização para continuar.";
+          }
+        );
+      } else {
+        document.getElementById("localizacao").innerText =
+          "Seu navegador não suporta localização.";
+      }
+    }
+  </script>
+
+</body>
+</html>
