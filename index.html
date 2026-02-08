@@ -1,9 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mercado Cafunfo</title>
-  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #333;
+    }
+    header {
+      background: #0a7cff;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 15px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #0a7cff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .whatsapp {
+      background: #25d366;
+      margin-top: 10px;
+    }
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
 
@@ -12,17 +56,47 @@
   <p>Compre e venda perto de você em Cafunfo</p>
 </header>
 
-<nav>
-  <a href="index.html">Início</a>
-  <a href="vendedores.html">Vendedores</a>
-  <a href="cadastrar.html">Cadastrar Loja</a>
-</nav>
-
 <main>
-  <button onclick="pegarLocalizacao()">📍 Usar minha localização</button>
-  <p id="localizacao"></p>
+  <div class="card">
+    <h3>📍 Sua localização</h3>
+    <p id="localizacao">Clique no botão para permitir localização</p>
+    <button onclick="pegarLocalizacao()">Usar minha localização</button>
+  </div>
+
+  <div class="card">
+    <h3>🏪 Loja Exemplo</h3>
+    <p>Produto: Arroz 25kg</p>
+    <p>📌 Bairro: Cafunfo Centro</p>
+    <a href="https://wa.me/244923000000" target="_blank">
+      <button class="whatsapp">Comprar no WhatsApp</button>
+    </a>
+  </div>
 </main>
 
-<script src="js/location.js"></script>
+<footer>
+  © 2026 - Mercado Cafunfo | Lunda Norte - Angola
+</footer>
+
+<script>
+  function pegarLocalizacao() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          document.getElementById("localizacao").innerText =
+            "Latitude: " + pos.coords.latitude.toFixed(4) +
+            " | Longitude: " + pos.coords.longitude.toFixed(4);
+        },
+        function() {
+          document.getElementById("localizacao").innerText =
+            "Permissão de localização negada";
+        }
+      );
+    } else {
+      document.getElementById("localizacao").innerText =
+        "Geolocalização não suportada";
+    }
+  }
+</script>
+
 </body>
 </html>
