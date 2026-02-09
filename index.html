@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Mercado Cafunfo</title>
+  <title>Vendas em Cafunfo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -15,19 +15,8 @@
     header {
       background: #1677ff;
       color: white;
-      padding: 25px 15px;
+      padding: 20px;
       text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 14px;
-      opacity: 0.9;
     }
 
     .container {
@@ -42,99 +31,41 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
-    .card h3 {
-      margin-top: 0;
-    }
-
-    .btn {
+    .btn-whatsapp {
       width: 100%;
       padding: 12px;
+      background: #25d366;
+      color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
-      cursor: pointer;
-    }
-
-    .btn-location {
-      background: #1677ff;
-      color: white;
-    }
-
-    .btn-whatsapp {
-      background: #25d366;
-      color: white;
-      margin-top: 10px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      font-size: 13px;
-      color: #666;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- TOPO -->
-  <header>
-    <h1>🛒 Mercado Cafunfo</h1>
-    <p>Compre e venda perto de você em Cafunfo</p>
-  </header>
+<header>
+  <h2>📦 Vendas perto de você</h2>
+</header>
 
-  <div class="container">
+<div class="container">
 
-    <!-- LOCALIZAÇÃO -->
-    <div class="card">
-      <h3>📍 Sua localização</h3>
-      <p id="localizacao">Permita a localização para ver produtos próximos.</p>
-      <button class="btn btn-location" onclick="pegarLocalizacao()">
-        Usar minha localização
-      </button>
-    </div>
-
-    <!-- LOJA (ESCONDIDA ATÉ PERMITIR LOCALIZAÇÃO) -->
-    <div class="card" id="lojaCard" style="display:none;">
-      <h3>🏪 Loja Exemplo</h3>
-      <p><strong>Produto:</strong> Arroz 25kg</p>
-      <p>📌 Bairro: Cafunfo Centro</p>
-      <a href="https://wa.me/244923000000" target="_blank">
-        <button class="btn btn-whatsapp">Comprar no WhatsApp</button>
-      </a>
-    </div>
-
+  <div class="card">
+    <h3>🏪 Loja Exemplo</h3>
+    <p>Produto: Arroz 25kg</p>
+    <p>📍 Cafunfo Centro</p>
+    <button class="btn-whatsapp">Comprar no WhatsApp</button>
   </div>
 
-  <!-- RODAPÉ -->
-  <footer>
-    © 2026 - Mercado Cafunfo | Lunda Norte - Angola
-  </footer>
+  <div class="card">
+    <h3>🏪 Loja Maria</h3>
+    <p>Produto: Óleo 5L</p>
+    <p>📍 Bairro Norte</p>
+    <button class="btn-whatsapp">Comprar no WhatsApp</button>
+  </div>
 
-  <!-- SCRIPT -->
-  <script>
-    function pegarLocalizacao() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(pos) {
-            document.getElementById("localizacao").innerText =
-              "Latitude: " + pos.coords.latitude.toFixed(4) +
-              " | Longitude: " + pos.coords.longitude.toFixed(4);
-
-            // Mostrar lojas após permitir localização
-            document.getElementById("lojaCard").style.display = "block";
-          },
-          function() {
-            document.getElementById("localizacao").innerText =
-              "Permissão negada. Ative a localização para continuar.";
-          }
-        );
-      } else {
-        document.getElementById("localizacao").innerText =
-          "Seu navegador não suporta localização.";
-      }
-    }
-  </script>
+</div>
 
 </body>
 </html>
