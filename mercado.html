@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Mercado - Magia App</title>
+  <title>Mercado de Cafunfo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -14,10 +14,10 @@
 
     header {
       background: #22c55e;
-      color: black;
       padding: 15px;
       text-align: center;
       font-weight: bold;
+      font-size: 18px;
     }
 
     .container {
@@ -25,9 +25,9 @@
     }
 
     .produto {
-      background: white;
-      border-radius: 12px;
+      background: #fff;
       padding: 15px;
+      border-radius: 12px;
       margin-bottom: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
@@ -44,18 +44,17 @@
 
     .preco {
       font-weight: bold;
-      color: #16a34a;
       font-size: 18px;
+      color: #16a34a;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    🛒 Mercado de Cafunfo
-  </header>
+  <header>🛒 Mercado de Cafunfo</header>
 
   <div class="container">
+
     <div class="produto">
       <h3>🍅 Tomate</h3>
       <p>Vendedora: Dona Maria</p>
@@ -64,23 +63,16 @@
 
     <div class="produto">
       <h3>🍌 Banana</h3>
-      <p>Vendedor: Senhor João</p>
+      <p>Vendedor: João</p>
       <p class="preco">300 Kz</p>
     </div>
-xx
+
     <div class="produto">
       <h3>🐟 Peixe seco</h3>
       <p>Vendedor: Mercado Central</p>
       <p class="preco">2.000 Kz</p>
     </div>
-  </div>
 
-  <script>
-    // bloquear acesso sem localização
-    if (localStorage.getItem("localizacaoPermitida") !== "sim") {
-      alert("Você precisa permitir a localização primeiro");
-      window.location.href = "index.html";
-    }
-  </script>
+  </div>
 </body>
 </html>
