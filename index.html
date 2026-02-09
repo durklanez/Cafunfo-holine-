@@ -8,19 +8,19 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      height: 100vh;
       background: #0f172a;
-      color: white;
+      color: #fff;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
 
-    .box {
+    .card {
       text-align: center;
       padding: 25px;
-      max-width: 350px;
+      max-width: 360px;
     }
 
     h1 {
@@ -37,58 +37,55 @@
       margin-top: 20px;
       width: 100%;
       padding: 15px;
+      font-size: 16px;
+      font-weight: bold;
       border: none;
       border-radius: 10px;
       background: #22c55e;
-      color: black;
-      font-size: 16px;
-      font-weight: bold;
+      color: #000;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #16a34a;
-    }
-
     .loading {
-      display: none;
       margin-top: 15px;
+      display: none;
       font-size: 14px;
     }
   </style>
 </head>
 
 <body>
-  <div class="box">
+  <div class="card">
     <h1>✨ Magia App</h1>
-    <p>Para ver o que está à venda perto de você em Cafunfo,<br>
-       precisamos da sua localização.</p>
+    <p>
+      Para ver os produtos à venda em Cafunfo,<br>
+      permita a sua localização.
+    </p>
 
-    <button onclick="permitirLocalizacao()">📍 Permitir localização</button>
+    <button onclick="permitir()">📍 Permitir localização</button>
 
     <div class="loading" id="loading">
-      Carregando mercado...
+      Entrando no mercado...
     </div>
   </div>
 
   <script>
-    function permitirLocalizacao() {
+    function permitir() {
       if (!navigator.geolocation) {
-        alert("Seu telefone não suporta localização");
+        alert("Este telefone não suporta localização");
         return;
       }
 
       document.getElementById("loading").style.display = "block";
 
       navigator.geolocation.getCurrentPosition(
-        function (posicao) {
-          // localização permitida
-          localStorage.setItem("localizacaoPermitida", "sim");
+        function () {
+          // sucesso → entra no mercado
           window.location.href = "mercado.html";
         },
         function () {
           document.getElementById("loading").style.display = "none";
-          alert("Você precisa permitir a localização para continuar");
+          alert("Você precisa permitir a localização");
         }
       );
     }
