@@ -2,76 +2,96 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Mercado Cafunfo</title>
+  <title>Magia App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f2f2f2;
-    }
-
-    header {
-      background: #1677ff;
+      background: #0f172a;
       color: white;
-      padding: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
       text-align: center;
+      padding: 25px;
+      max-width: 350px;
     }
 
-    .container {
-      padding: 15px;
+    h1 {
+      color: #22c55e;
+      margin-bottom: 10px;
     }
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    p {
+      font-size: 14px;
+      opacity: 0.9;
     }
 
     button {
+      margin-top: 20px;
       width: 100%;
-      padding: 14px;
-      background: #1677ff;
-      color: white;
+      padding: 15px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: black;
       font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
+  <div class="box">
+    <h1>✨ Magia App</h1>
+    <p>Para ver o que está à venda perto de você em Cafunfo,<br>
+       precisamos da sua localização.</p>
 
-<header>
-  <h1>🛒 Mercado Cafunfo</h1>
-  <p>Compre e venda perto de você</p>
-</header>
+    <button onclick="permitirLocalizacao()">📍 Permitir localização</button>
 
-<div class="container">
-  <div class="card">
-    <h3>📍 Permitir localização</h3>
-    <p>Precisamos da sua localização para mostrar lojas próximas.</p>
-    <button onclick="permitir()">Permitir localização</button>
+    <div class="loading" id="loading">
+      Carregando mercado...
+    </div>
   </div>
-</div>
 
-<script>
-  function permitir() {
-    if (navigator.geolocation) {
+  <script>
+    function permitirLocalizacao() {
+      if (!navigator.geolocation) {
+        alert("Seu telefone não suporta localização");
+        return;
+      }
+
+      document.getElementById("loading").style.display = "block";
+
       navigator.geolocation.getCurrentPosition(
-        function () {
-          // depois de permitir → entra
-          window.location.href = "entrar.html";
+        function (posicao) {
+          // localização permitida
+          localStorage.setItem("localizacaoPermitida", "sim");
+          window.location.href = "mercado.html";
         },
         function () {
-          alert("Ative a localização para continuar");
+          document.getElementById("loading").style.display = "none";
+          alert("Você precisa permitir a localização para continuar");
         }
       );
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
