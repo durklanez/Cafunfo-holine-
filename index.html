@@ -2,14 +2,14 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Magia App</title>
+  <title>Cafunfo Holine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: #0f172a;
+      background: linear-gradient(180deg, #020617, #0f172a);
       color: #fff;
       font-family: Arial, sans-serif;
       display: flex;
@@ -19,44 +19,71 @@
 
     .card {
       text-align: center;
-      padding: 25px;
-      max-width: 360px;
+      padding: 30px 25px;
+      max-width: 380px;
+      width: 100%;
     }
 
-    h1 {
+    /* TÍTULO GRANDE */
+    .titulo {
+      font-size: 34px;
+      font-weight: bold;
       color: #22c55e;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
+    }
+
+    .subtitulo {
+      font-size: 18px;
+      font-weight: bold;
+      color: #e5e7eb;
+      margin-bottom: 15px;
     }
 
     p {
-      font-size: 14px;
-      opacity: 0.9;
+      font-size: 15px;
+      opacity: 0.95;
+      line-height: 1.4;
     }
 
     button {
-      margin-top: 20px;
+      margin-top: 25px;
       width: 100%;
-      padding: 15px;
-      font-size: 16px;
+      padding: 16px;
+      font-size: 17px;
       font-weight: bold;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #22c55e;
       color: #000;
       cursor: pointer;
     }
 
+    button:active {
+      transform: scale(0.98);
+    }
+
     .loading {
-      margin-top: 15px;
+      margin-top: 18px;
       display: none;
       font-size: 14px;
+      opacity: 0.9;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 12px;
+      opacity: 0.6;
     }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <h1>✨ Magia App</h1>
+
+    <!-- TÍTULO GRANDE -->
+    <div class="titulo">Cafunfo Holine</div>
+    <div class="subtitulo">✨ Magia App</div>
+
     <p>
       Para ver os produtos à venda em Cafunfo,<br>
       permita a sua localização.
@@ -67,6 +94,11 @@
     <div class="loading" id="loading">
       Entrando no mercado...
     </div>
+
+    <footer>
+      © 2026 • Cafunfo Holine
+    </footer>
+
   </div>
 
   <script>
@@ -80,7 +112,6 @@
 
       navigator.geolocation.getCurrentPosition(
         function () {
-          // sucesso → entra no mercado
           window.location.href = "mercado.html";
         },
         function () {
