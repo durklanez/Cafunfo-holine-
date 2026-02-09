@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Vendas em Cafunfo</title>
+  <title>Mercado Cafunfo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -15,7 +15,7 @@
     header {
       background: #1677ff;
       color: white;
-      padding: 20px;
+      padding: 25px;
       text-align: center;
     }
 
@@ -26,15 +26,14 @@
     .card {
       background: white;
       border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
-    .btn-whatsapp {
+    button {
       width: 100%;
-      padding: 12px;
-      background: #25d366;
+      padding: 14px;
+      background: #1677ff;
       color: white;
       border: none;
       border-radius: 8px;
@@ -46,26 +45,33 @@
 <body>
 
 <header>
-  <h2>📦 Vendas perto de você</h2>
+  <h1>🛒 Mercado Cafunfo</h1>
+  <p>Compre e venda perto de você</p>
 </header>
 
 <div class="container">
-
   <div class="card">
-    <h3>🏪 Loja Exemplo</h3>
-    <p>Produto: Arroz 25kg</p>
-    <p>📍 Cafunfo Centro</p>
-    <button class="btn-whatsapp">Comprar no WhatsApp</button>
+    <h3>📍 Permitir localização</h3>
+    <p>Precisamos da sua localização para mostrar lojas próximas.</p>
+    <button onclick="permitir()">Permitir localização</button>
   </div>
-
-  <div class="card">
-    <h3>🏪 Loja Maria</h3>
-    <p>Produto: Óleo 5L</p>
-    <p>📍 Bairro Norte</p>
-    <button class="btn-whatsapp">Comprar no WhatsApp</button>
-  </div>
-
 </div>
+
+<script>
+  function permitir() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function () {
+          // depois de permitir → entra
+          window.location.href = "entrar.html";
+        },
+        function () {
+          alert("Ative a localização para continuar");
+        }
+      );
+    }
+  }
+</script>
 
 </body>
 </html>
