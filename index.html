@@ -26,21 +26,22 @@
 
     /* TÍTULO GRANDE */
     .titulo {
-      font-size: 34px;
+      font-size: 40px;       /* bem grande */
       font-weight: bold;
       color: #22c55e;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px #000;
     }
 
     .subtitulo {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: bold;
       color: #e5e7eb;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     p {
-      font-size: 15px;
+      font-size: 16px;
       opacity: 0.95;
       line-height: 1.4;
     }
@@ -81,7 +82,7 @@
   <div class="card">
 
     <!-- TÍTULO GRANDE -->
-    <div class="titulo">Cafunfo Holine</div>
+    <div class="titulo">CAFUNFO HOLINE</div>
     <div class="subtitulo">✨ Magia App</div>
 
     <p>
@@ -111,10 +112,12 @@
       document.getElementById("loading").style.display = "block";
 
       navigator.geolocation.getCurrentPosition(
-        function () {
-          window.location.href = "mercado.html";
+        function (position) {
+          console.log("Latitude:", position.coords.latitude);
+          console.log("Longitude:", position.coords.longitude);
+          window.location.assign("mercado.html");
         },
-        function () {
+        function (error) {
           document.getElementById("loading").style.display = "none";
           alert("Você precisa permitir a localização");
         }
