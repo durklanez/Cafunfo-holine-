@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Mercado - Magia App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    header {
+      background: #22c55e;
+      color: black;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .produto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .produto h3 {
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .produto p {
+      margin: 5px 0;
+      color: #475569;
+    }
+
+    .preco {
+      font-weight: bold;
+      color: #16a34a;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    🛒 Mercado de Cafunfo
+  </header>
+
+  <div class="container">
+    <div class="produto">
+      <h3>🍅 Tomate</h3>
+      <p>Vendedora: Dona Maria</p>
+      <p class="preco">500 Kz</p>
+    </div>
+
+    <div class="produto">
+      <h3>🍌 Banana</h3>
+      <p>Vendedor: Senhor João</p>
+      <p class="preco">300 Kz</p>
+    </div>
+
+    <div class="produto">
+      <h3>🐟 Peixe seco</h3>
+      <p>Vendedor: Mercado Central</p>
+      <p class="preco">2.000 Kz</p>
+    </div>
+  </div>
+
+  <script>
+    // bloquear acesso sem localização
+    if (localStorage.getItem("localizacaoPermitida") !== "sim") {
+      alert("Você precisa permitir a localização primeiro");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
