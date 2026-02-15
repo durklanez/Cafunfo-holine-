@@ -1,16 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Vendedores - Mercado Cafunfo</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Mercado Cafunfo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial;margin:0;background:#f1f5f9;}
+header{background:#2563eb;color:white;padding:15px;text-align:center;}
+.container{padding:15px;}
+.card{background:white;padding:15px;margin-bottom:15px;border-radius:10px;}
+</style>
 </head>
 <body>
 
-<h2>🏪 Vendedores em Cafunfo</h2>
+<header>
+<h2>🛒 Mercado Cafunfo</h2>
+</header>
 
-<div id="lista-vendedores"></div>
+<div class="container" id="lista"></div>
 
-<script src="js/vendedores.js"></script>
+<script>
+const lista=document.getElementById("lista");
+let produtos=JSON.parse(localStorage.getItem("produtos"))||[];
+
+if(produtos.length===0){
+  lista.innerHTML="<p>Nenhum produto publicado ainda</p>";
+}
+
+produtos.forEach(p=>{
+  lista.innerHTML+=`
+  <div class="card">
+    <h3>${p.tipo}</h3>
+    <p>${p.descricao}</p>
+    <p>📍 ${p.morada}</p>
+    <a href="https://wa.me/${p.telefone}" target="_blank">Comprar</a>
+  </div>`;
+});
+</script>
+
 </body>
 </html>
