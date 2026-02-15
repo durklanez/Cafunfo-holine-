@@ -1,128 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Cafunfo Holine</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(180deg, #020617, #0f172a);
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .card {
-      text-align: center;
-      padding: 30px 25px;
-      max-width: 380px;
-      width: 100%;
-    }
-
-    /* TÍTULO GRANDE */
-    .titulo {
-      font-size: 40px;       /* bem grande */
-      font-weight: bold;
-      color: #22c55e;
-      margin-bottom: 10px;
-      text-shadow: 1px 1px 2px #000;
-    }
-
-    .subtitulo {
-      font-size: 22px;
-      font-weight: bold;
-      color: #e5e7eb;
-      margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 16px;
-      opacity: 0.95;
-      line-height: 1.4;
-    }
-
-    button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      background: #22c55e;
-      color: #000;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .loading {
-      margin-top: 18px;
-      display: none;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    footer {
-      margin-top: 25px;
-      font-size: 12px;
-      opacity: 0.6;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Cafunfo Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#1e3a8a;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+button{
+  padding:15px;
+  width:200px;
+  background:#22c55e;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
+</style>
 </head>
-
 <body>
-  <div class="card">
 
-    <!-- TÍTULO GRANDE -->
-    <div class="titulo">CAFUNFO HOLINE</div>
-    <div class="subtitulo">✨ Magia App</div>
+<div>
+<h2>🛒 CAFUNFO ONLINE</h2>
+<p>O mercado digital de Cafunfo</p>
+<button onclick="permitir()">Permitir localização</button>
+</div>
 
-    <p>
-      Para ver os produtos à venda em Cafunfo,<br>
-      permita a sua localização.
-    </p>
-
-    <button onclick="permitir()">📍 Permitir localização</button>
-
-    <div class="loading" id="loading">
-      Entrando no mercado...
-    </div>
-
-    <footer>
-      © 2026 • Cafunfo Holine
-    </footer>
-
-  </div>
-
-  <script>
-    function permitir() {
-      if (!navigator.geolocation) {
-        alert("Este telefone não suporta localização");
-        return;
-      }
-
-      document.getElementById("loading").style.display = "block";
-
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          console.log("Latitude:", position.coords.latitude);
-          console.log("Longitude:", position.coords.longitude);
-          window.location.assign("mercado.html");
-        },
-        function (error) {
-          document.getElementById("loading").style.display = "none";
-          alert("Você precisa permitir a localização");
-        }
-      );
+<script>
+function permitir(){
+  navigator.geolocation.getCurrentPosition(
+    function(){
+      window.location.href="menu.html";
+    },
+    function(){
+      alert("Permita a localização!");
     }
-  </script>
+  );
+}
+</script>
+
 </body>
 </html>
