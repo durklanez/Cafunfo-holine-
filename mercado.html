@@ -1,78 +1,87 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Mercado de Cafunfo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Mercado - Cafunfo Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f1f5f9;
+}
 
-    header {
-      background: #22c55e;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
+header {
+  background: #2563eb;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
 
-    .container {
-      padding: 15px;
-    }
+.container {
+  padding: 15px;
+}
 
-    .produto {
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+.card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
-    .produto h3 {
-      margin: 0;
-      color: #0f172a;
-    }
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
 
-    .produto p {
-      margin: 5px 0;
-      color: #475569;
-    }
+.btn {
+  display: block;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  background: #22c55e;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
 
-    .preco {
-      font-weight: bold;
-      font-size: 18px;
-      color: #16a34a;
-    }
-  </style>
+</style>
 </head>
 
 <body>
-  <header>🛒 Mercado de Cafunfo</header>
 
-  <div class="container">
+<header>
+<h2>🛒 Mercado Cafunfo</h2>
+</header>
 
-    <div class="produto">
-      <h3>🍅 Tomate</h3>
-      <p>Vendedora: Dona Maria</p>
-      <p class="preco">500 Kz</p>
+<div class="container" id="lista"></div>
+
+<script>
+const lista = document.getElementById("lista");
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+if (produtos.length === 0) {
+  lista.innerHTML = "<p>Nenhum produto publicado ainda.</p>";
+}
+
+produtos.forEach(produto => {
+  lista.innerHTML += `
+    <div class="card">
+      <h3>${produto.tipo}</h3>
+      <p>${produto.descricao}</p>
+      <p>📍 ${produto.morada}</p>
+      <img src="${produto.foto}">
+      <a class="btn" href="https://wa.me/${produto.telefone}" target="_blank">
+        📞 Comprar
+      </a>
     </div>
+  `;
+});
+</script>
 
-    <div class="produto">
-      <h3>🍌 Banana</h3>
-      <p>Vendedor: João</p>
-      <p class="preco">300 Kz</p>
-    </div>
-
-    <div class="produto">
-      <h3>🐟 Peixe seco</h3>
-      <p>Vendedor: Mercado Central</p>
-      <p class="preco">2.000 Kz</p>
-    </div>
-
-  </div>
 </body>
 </html>
