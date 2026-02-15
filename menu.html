@@ -2,31 +2,43 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Menu</title>
+<title>Menu - Cafunfo Online</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
-  font-family:Arial;
+  font-family:Arial, sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
   background:#f1f5f9;
+  margin:0;
 }
 .box{
   text-align:center;
+  width:90%;
+  max-width:400px;
+}
+h2{
+  margin-bottom:30px;
+  color:#1e3a8a;
 }
 a{
   display:block;
   padding:18px;
-  margin:15px;
+  margin:15px 0;
   text-decoration:none;
   font-weight:bold;
-  border-radius:10px;
+  border-radius:12px;
   color:white;
+  font-size:18px;
 }
-.comprar{background:#22c55e;}
-.vender{background:#2563eb;}
+.comprar{
+  background:#22c55e;
+}
+.vender{
+  background:#2563eb;
+}
 </style>
 </head>
 <body>
@@ -35,7 +47,9 @@ a{
 <h2>Escolha uma opção</h2>
 
 <a href="mercado.html" class="comprar">🛒 Comprar</a>
-<a href="vender.html" class="vender">🏪 Vender</a>
+
+<!-- AQUI ESTÁ A CORREÇÃO -->
+<a href="cadastrar.html" class="vender">🏪 Vender</a>
 
 </div>
 
