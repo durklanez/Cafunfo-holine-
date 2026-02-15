@@ -2,40 +2,71 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Mercado Cafunfo</title>
+<title>Vender</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{font-family:Arial;margin:0;background:#f1f5f9;}
 header{background:#2563eb;color:white;padding:15px;text-align:center;}
 .container{padding:15px;}
-.card{background:white;padding:15px;margin-bottom:15px;border-radius:10px;}
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  width:100%;
+  padding:15px;
+  background:#22c55e;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
 </style>
 </head>
 <body>
 
 <header>
-<h2>🛒 Mercado Cafunfo</h2>
+<h2>🏪 Criar Conta e Publicar</h2>
 </header>
 
-<div class="container" id="lista"></div>
+<div class="container">
+
+<input type="text" id="nome" placeholder="Nome completo">
+<input type="tel" id="telefone" placeholder="Número de telefone">
+<input type="text" id="morada" placeholder="Onde mora">
+
+<select id="tipo">
+<option>Peixe</option>
+<option>Casa</option>
+<option>Hospedaria</option>
+<option>Serviço de Quarto</option>
+</select>
+
+<textarea id="descricao" placeholder="Descreva seu serviço"></textarea>
+
+<button onclick="publicar()">Publicar</button>
+
+</div>
 
 <script>
-const lista=document.getElementById("lista");
+function publicar(){
+let produto={
+  nome:nome.value,
+  telefone:telefone.value,
+  morada:morada.value,
+  tipo:tipo.value,
+  descricao:descricao.value
+};
+
 let produtos=JSON.parse(localStorage.getItem("produtos"))||[];
+produtos.push(produto);
+localStorage.setItem("produtos",JSON.stringify(produtos));
 
-if(produtos.length===0){
-  lista.innerHTML="<p>Nenhum produto publicado ainda</p>";
+alert("Publicado com sucesso!");
+window.location.href="mercado.html";
 }
-
-produtos.forEach(p=>{
-  lista.innerHTML+=`
-  <div class="card">
-    <h3>${p.tipo}</h3>
-    <p>${p.descricao}</p>
-    <p>📍 ${p.morada}</p>
-    <a href="https://wa.me/${p.telefone}" target="_blank">Comprar</a>
-  </div>`;
-});
 </script>
 
 </body>
