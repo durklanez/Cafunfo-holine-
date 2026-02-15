@@ -1,23 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Cadastrar Loja</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Vender - Cafunfo Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f1f5f9;
+}
+
+header {
+  background: #2563eb;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.container {
+  padding: 15px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  background: #22c55e;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+</style>
 </head>
+
 <body>
 
-<h2>📋 Cadastrar Vendedor</h2>
+<header>
+<h2>🏪 Publicar Produto</h2>
+</header>
 
-<form>
-  <input type="text" placeholder="Nome da loja" required>
-  <input type="text" placeholder="Produto principal" required>
-  <input type="text" placeholder="Preço (Kz)" required>
-  <input type="text" placeholder="Bairro em Cafunfo" required>
-  <input type="text" placeholder="WhatsApp" required>
+<div class="container">
 
-  <button type="submit">Cadastrar</button>
-</form>
+<input type="text" id="nome" placeholder="Nome completo" required>
+
+<input type="tel" id="telefone" placeholder="Número de telefone" required>
+
+<input type="text" id="morada" placeholder="Onde mora" required>
+
+<select id="tipo">
+  <option value="Peixe">Peixe</option>
+  <option value="Casa">Casa</option>
+  <option value="Hospedaria">Hospedaria</option>
+  <option value="Serviço de Quarto">Serviço de Quarto</option>
+</select>
+
+<textarea id="descricao" placeholder="Descreva o que está vendendo"></textarea>
+
+<input type="file" id="foto" accept="image/*">
+
+<button onclick="publicar()">📤 Publicar</button>
+
+</div>
+
+<script>
+function publicar() {
+
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const morada = document.getElementById("morada").value;
+  const tipo = document.getElementById("tipo").value;
+  const descricao = document.getElementById("descricao").value;
+  const fotoInput = document.getElementById("foto");
+
+  if (!nome || !telefone || !morada || !descricao) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function() {
+
+    const produto = {
+      nome,
+      telefone,
+      morada,
+      tipo,
+      descricao,
+      foto: reader.result
+    };
+
+    let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+    produtos.push(produto);
+
+    localStorage.setItem("produtos", JSON.stringify(produtos));
+
+    alert("Produto publicado com sucesso!");
+    window.location.href = "mercado.html";
+  };
+
+  if (fotoInput.files[0]) {
+    reader.readAsDataURL(fotoInput.files[0]);
+  } else {
+    reader.onload();
+  }
+}
+</script>
 
 </body>
 </html>
