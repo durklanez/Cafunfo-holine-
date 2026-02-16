@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial;background:#f1f5f9;margin:0;}
+.container{padding:20px;}
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  width:100%;
+  padding:15px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
 
+<div class="container">
+<h2>Criar Conta / Login</h2>
+
+<input type="text" id="nome" placeholder="Nome completo">
+<input type="tel" id="telefone" placeholder="Telefone">
+<input type="password" id="senha" placeholder="Senha">
+
+<button onclick="entrar()">Entrar</button>
+</div>
+
+<script>
+function entrar(){
+
+let usuario={
+  nome:nome.value,
+  telefone:telefone.value,
+  senha:senha.value
+};
+
+if(!usuario.nome || !usuario.telefone || !usuario.senha){
+  alert("Preencha todos os campos");
+  return;
+}
+
+localStorage.setItem("usuario",JSON.stringify(usuario));
+
+window.location.href="perfil.html";
+}
+</script>
+
+</body>
+  </html>
