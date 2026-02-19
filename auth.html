@@ -1,18 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conta</title>
+<title>Criar Conta - Cafunfo</title>
+
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;}
+body{
+  font-family: Arial, sans-serif;
+  background:#f1f5f9;
+  padding:20px;
+}
+
+.container{
+  max-width:400px;
+  margin:auto;
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+}
+
 input{
   width:100%;
   padding:12px;
   margin-bottom:15px;
   border-radius:8px;
   border:1px solid #ccc;
+  font-size:14px;
 }
+
 button{
   width:100%;
   padding:15px;
@@ -20,28 +42,68 @@ button{
   color:white;
   border:none;
   border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+
+.link{
+  text-align:center;
+  margin-top:15px;
+}
+
+.link a{
+  text-decoration:none;
+  color:#2563eb;
 }
 </style>
 </head>
+
 <body>
+
+<div class="container">
 
 <h2>Criar Conta</h2>
 
-<input type="text" id="nome" placeholder="Nome">
-<input type="tel" id="numero" placeholder="Número">
-<input type="password" id="senha" placeholder="Senha">
+<input type="text" id="nome" placeholder="Seu Nome" required>
+<input type="tel" id="numero" placeholder="Seu Número" required>
+<input type="password" id="senha" placeholder="Criar Senha" required>
 
-<button onclick="criar()">Continuar</button>
+<button onclick="criar()">Criar Conta</button>
+
+<div class="link">
+  <p>Já tem conta? <a href="login.html">Fazer Login</a></p>
+</div>
+
+</div>
 
 <script>
 function criar(){
-let user={
-  nome:nome.value,
-  numero:numero.value,
-  senha:senha.value
+
+let nome = document.getElementById("nome").value;
+let numero = document.getElementById("numero").value;
+let senha = document.getElementById("senha").value;
+
+if(nome === "" || numero === "" || senha === ""){
+  alert("Preencha todos os campos!");
+  return;
+}
+
+let user = {
+  nome: nome,
+  numero: numero,
+  senha: senha
 };
-localStorage.setItem("user",JSON.stringify(user));
-window.location.href="perfil-setup.html";
+
+localStorage.setItem("user", JSON.stringify(user));
+
+alert("Conta criada com sucesso!");
+
+window.location.href = "perfil.html"; // NÃO VAI MAIS DAR 404
+
 }
 </script>
 
