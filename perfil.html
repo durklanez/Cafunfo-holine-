@@ -3,76 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Completar Perfil</title>
+<title>Meu Perfil</title>
 <style>
-body {
-  font-family: Arial;
-  background: #f1f5f9;
-  padding: 20px;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-button {
-  width: 100%;
-  padding: 15px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+img{width:120px;height:120px;border-radius:50%;margin-bottom:15px;}
 </style>
 </head>
 <body>
 
-<h2>Completar Perfil</h2>
-
-<input type="text" id="apelido" placeholder="Apelido">
-<input type="text" id="provincia" placeholder="Província">
-<input type="text" id="bairro" placeholder="Bairro">
-<input type="text" id="funcao" placeholder="Função (o que você faz)">
-
-<!-- Botão seguinte -->
-<button id="seguinteBtn" style="display:none;" onclick="irParaPrinc()">Seguinte ➡</button>
+<div id="perfilContainer"></div>
 
 <script>
-let user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user"));
 
-// Checa se já existe perfil
-if (user && user.perfilCompleto) {
-  // Se já tiver perfil, mostra direto o botão “Seguinte”
-  document.getElementById("seguinteBtn").style.display = "block";
-} else {
-  // Se não, cria evento para preencher perfil
-  let inputs = ["apelido","provincia","bairro","funcao"];
-  inputs.forEach(id => {
-    document.getElementById(id).addEventListener("input", () => {
-      // Mostra botão “Seguinte” só quando todos campos tiverem valor
-      let todosPreenchidos = inputs.every(i => document.getElementById(i).value.trim() !== "");
-      document.getElementById("seguinteBtn").style.display = todosPreenchidos ? "block" : "none";
-    });
-  });
-}
+const container = document.getElementById("perfilContainer");
 
-function irParaPrinc(){
-  // Salva os dados do perfil
-  user.perfil = {
-    apelido: document.getElementById("apelido").value,
-    provincia: document.getElementById("provincia").value,
-    bairro: document.getElementById("bairro").value,
-    funcao: document.getElementById("funcao").value
-  };
-  user.perfilCompleto = true;
-
-  localStorage.setItem("user", JSON.stringify(user));
-
-  // Vai para pasta principal
-  window.location.href = "principal.html"; // <-- aqui você coloca a página principal
+if(user.perfilPreenchido){
+  container.innerHTML = `
+    <img src="${user.foto || 'default-profile.png'}" alt="Foto de Perfil">
+    <h2>${user.nomeCompleto}</h2>
+    <p>Apelido: ${user.apelido}</p>
+    <p>Província: ${user.provincia}</p>
+    <p>Bairro: ${user.bairro}</p>
+    <p>Função: ${user.funcao}</p>
+  `;
+}else{
+  container.innerHTML = `
+    <p>Perfil incompleto. <a href="perfil-setup.html">Preencher Perfil</a></p>
+  `;
 }
 </script>
 
