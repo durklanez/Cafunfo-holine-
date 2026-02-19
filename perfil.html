@@ -1,87 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Perfil</title>
-
+<title>Completar Perfil</title>
 <style>
-body{
-  font-family:Arial;
-  background:#f1f5f9;
-  margin:0;
-  text-align:center;
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+input,select{
+  width:100%;
+  padding:10px;
+  margin-bottom:15px;
 }
-
-.header{
-  background:#2563eb;
-  padding:40px 0;
+button{
+  width:100%;
+  padding:12px;
+  background:#22c55e;
+  border:none;
   color:white;
-}
-
-.foto-container{
-  margin-top:-50px;
-}
-
-.foto-container img{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:5px solid white;
-  object-fit:cover;
-}
-
-input{
-  margin-top:20px;
-}
-
-.info{
-  margin-top:20px;
-  font-size:18px;
+  border-radius:8px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-  <h2>Meu Perfil</h2>
-</div>
+<h2>Completar Perfil</h2>
 
-<div class="foto-container">
-  <img id="preview" src="https://via.placeholder.com/120" alt="Foto Perfil">
-</div>
+<input type="text" id="nomeCompleto" placeholder="Nome Completo">
+<input type="text" id="apelido" placeholder="Apelido">
 
-<input type="file" id="foto" accept="image/*">
+<select id="mostrar">
+  <option value="nome">Mostrar Nome Próprio</option>
+  <option value="apelido">Mostrar Apelido</option>
+</select>
 
-<div class="info" id="dados"></div>
+<input type="text" id="municipio" placeholder="Município">
+<input type="text" id="bairro" placeholder="Bairro">
+<input type="date" id="nascimento">
+
+<button onclick="salvar()">OK</button>
 
 <script>
+function salvar(){
 
-// Mostrar nome salvo
-let user = JSON.parse(localStorage.getItem("user"));
+let perfil={
+  nomeCompleto:nomeCompleto.value,
+  apelido:apelido.value,
+  mostrar:mostrar.value,
+  municipio:municipio.value,
+  bairro:bairro.value,
+  nascimento:nascimento.value,
+  configurado:true
+};
 
-if(user){
-  document.getElementById("dados").innerHTML =
-  "<p><strong>"+user.nome+"</strong></p><p>"+user.numero+"</p>";
+localStorage.setItem("perfilCompleto", JSON.stringify(perfil));
+
+window.location.href="home.html";
 }
-
-// Preview da imagem
-document.getElementById("foto").addEventListener("change", function(e){
-  const reader = new FileReader();
-  reader.onload = function(){
-    document.getElementById("preview").src = reader.result;
-    localStorage.setItem("fotoPerfil", reader.result);
-  }
-  reader.readAsDataURL(e.target.files[0]);
-});
-
-// Carregar foto salva
-let fotoSalva = localStorage.getItem("fotoPerfil");
-if(fotoSalva){
-  document.getElementById("preview").src = fotoSalva;
-}
-
 </script>
 
 </body>
