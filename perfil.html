@@ -3,59 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Completar Perfil</title>
+<title>Meu Perfil</title>
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;}
-input,select{
-  width:100%;
-  padding:10px;
-  margin-bottom:15px;
+body{
+  font-family:Arial;
+  background:#f1f5f9;
+  padding:20px;
+  text-align:center;
 }
-button{
-  width:100%;
-  padding:12px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  border-radius:8px;
+img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #2563eb;
+}
+.card{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  margin-top:20px;
 }
 </style>
 </head>
 <body>
 
-<h2>Completar Perfil</h2>
+<img id="foto">
 
-<input type="text" id="nomeCompleto" placeholder="Nome Completo">
-<input type="text" id="apelido" placeholder="Apelido">
-
-<select id="mostrar">
-  <option value="nome">Mostrar Nome Próprio</option>
-  <option value="apelido">Mostrar Apelido</option>
-</select>
-
-<input type="text" id="municipio" placeholder="Município">
-<input type="text" id="bairro" placeholder="Bairro">
-<input type="date" id="nascimento">
-
-<button onclick="salvar()">OK</button>
+<div class="card">
+<h2 id="nome"></h2>
+<p id="funcao"></p>
+<p id="local"></p>
+<p><strong>Produtos Publicados:</strong> <span id="publicados">0</span></p>
+<p><strong>Produtos Vendidos:</strong> <span id="vendidos">0</span></p>
+</div>
 
 <script>
-function salvar(){
+let user = JSON.parse(localStorage.getItem("user"));
+let perfil = JSON.parse(localStorage.getItem("perfil"));
 
-let perfil={
-  nomeCompleto:nomeCompleto.value,
-  apelido:apelido.value,
-  mostrar:mostrar.value,
-  municipio:municipio.value,
-  bairro:bairro.value,
-  nascimento:nascimento.value,
-  configurado:true
-};
+document.getElementById("foto").src =
+localStorage.getItem("fotoPerfil") || "https://via.placeholder.com/120";
 
-localStorage.setItem("perfilCompleto", JSON.stringify(perfil));
-
-window.location.href="home.html";
-}
+document.getElementById("nome").innerText = user.nomeCompleto;
+document.getElementById("funcao").innerText = perfil.funcao;
+document.getElementById("local").innerText =
+perfil.provincia + " - " + perfil.bairro;
 </script>
 
 </body>
