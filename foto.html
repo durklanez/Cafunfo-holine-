@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foto de Perfil</title>
+<style>
+body{font-family:Arial;text-align:center;padding:20px;background:#f1f5f9;}
+img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:4px solid #2563eb;
+  object-fit:cover;
+}
+button{
+  padding:12px 20px;
+  margin-top:20px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+}
+</style>
+</head>
+<body>
 
+<h2>Carregar Foto de Perfil</h2>
+
+<img id="preview" src="https://via.placeholder.com/120">
+
+<br><br>
+<input type="file" id="foto" accept="image/*">
+
+<br>
+<button onclick="seguinte()">Seguinte</button>
+
+<script>
+document.getElementById("foto").addEventListener("change", function(e){
+  const reader = new FileReader();
+  reader.onload = function(){
+    document.getElementById("preview").src = reader.result;
+    localStorage.setItem("fotoPerfil", reader.result);
+  }
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+function seguinte(){
+  if(!localStorage.getItem("fotoPerfil")){
+    alert("Carregue uma foto primeiro!");
+    return;
+  }
+  window.location.href="completar-perfil.html";
+}
+</script>
+
+</body>
+</html>
