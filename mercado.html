@@ -1,60 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Mercado</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado</title>
 <style>
-body{font-family:Arial;margin:0;background:#f1f5f9;}
-header{background:#2563eb;color:white;padding:15px;text-align:center;}
-.container{padding:15px;}
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:20px;
+  border-radius:8px;
+}
 .card{
   background:white;
   padding:15px;
-  margin-bottom:15px;
+  margin-bottom:10px;
   border-radius:10px;
-}
-a{
-  display:block;
-  margin-top:10px;
-  padding:10px;
-  background:#22c55e;
-  color:white;
-  text-align:center;
-  text-decoration:none;
-  border-radius:8px;
 }
 </style>
 </head>
 <body>
 
-<header>
-<h2>🛒 Mercado Cafunfo</h2>
-</header>
+<h2>Mercado</h2>
 
-<div class="container" id="lista"></div>
+<input type="text" id="pesquisa" placeholder="🔍 Pesquisar produto..." onkeyup="buscar()">
+
+<div id="lista"></div>
 
 <script>
-
-let lista=document.getElementById("lista");
 let produtos=JSON.parse(localStorage.getItem("produtos"))||[];
+let lista=document.getElementById("lista");
 
-if(produtos.length===0){
-  lista.innerHTML="<p>Nenhum produto publicado ainda</p>";
+function mostrar(listaProdutos){
+lista.innerHTML="";
+listaProdutos.forEach(p=>{
+lista.innerHTML+=`
+<div class="card">
+<h3>${p.nome}</h3>
+<p>${p.preco}</p>
+</div>`;
+});
 }
 
-produtos.forEach(p=>{
-  lista.innerHTML+=`
-  <div class="card">
-    <h3>${p.produto}</h3>
-    <p>${p.descricao}</p>
-    <p><strong>Preço:</strong> ${p.preco}</p>
-    <p><strong>Vendedor:</strong> ${p.vendedor}</p>
-    <a href="https://wa.me/${p.telefone}" target="_blank">Comprar</a>
-  </div>
-  `;
-});
+function buscar(){
+let termo=pesquisa.value.toLowerCase();
+let filtrados=produtos.filter(p=>p.nome.toLowerCase().includes(termo));
+mostrar(filtrados);
+}
 
+mostrar(produtos);
 </script>
 
 </body>
