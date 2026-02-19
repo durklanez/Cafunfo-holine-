@@ -65,6 +65,16 @@ header {
   margin: 8px 0;
   border-radius: 8px;
 }
+
+button {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -74,26 +84,27 @@ header {
 </header>
 
 <div class="profile-container" id="perfilContainer">
-  <!-- Perfil vai ser gerado aqui via JS -->
+  <!-- Perfil vai ser gerado aqui -->
 </div>
 
 <script>
 // Pega usuário do localStorage
-const user = JSON.parse(localStorage.getItem("user")) || {};
+let user = JSON.parse(localStorage.getItem("user"));
 
 // Função para mostrar perfil
 function mostrarPerfil() {
   const container = document.getElementById("perfilContainer");
 
-  if(!user.nomeCompleto){
-    container.innerHTML = `<p>Perfil não encontrado. <a href="cadastrar.html">Criar Conta</a></p>`;
+  if(!user){
+    // Se usuário não existe, redireciona para criar conta
+    window.location.href = "cadastrar.html";
     return;
   }
 
   // Foto default se não tiver
   const foto = user.foto || 'https://via.placeholder.com/120';
 
-  // Lista de produtos (exemplo)
+  // Lista de produtos
   const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
   container.innerHTML = `
@@ -116,16 +127,25 @@ function mostrarPerfil() {
   `;
 }
 
-// Função para alterar foto
+// Função para trocar foto
 function editarFoto(){
-  const url = prompt("Cole a URL da foto de perfil:");
-  if(url){
-    user.foto = url;
-    localStorage.setItem("user", JSON.stringify(user));
-    mostrarPerfil();
-  }
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(){
+      user.foto = reader.result; // Salva a imagem no localStorage
+      localStorage.setItem("user", JSON.stringify(user));
+      mostrarPerfil();
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
 }
 
+// Mostra perfil na inicialização
 mostrarPerfil();
 </script>
 
