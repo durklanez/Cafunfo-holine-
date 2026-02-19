@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Completar Perfil</title>
+<style>
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:15px;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#22c55e;
+  border:none;
+  color:white;
+  border-radius:8px;
+}
+</style>
+</head>
+<body>
 
+<h2>Completar Perfil</h2>
+
+<input type="text" id="apelido" placeholder="Apelido">
+<input type="text" id="provincia" placeholder="Província">
+<input type="text" id="bairro" placeholder="Bairro">
+<input type="text" id="funcao" placeholder="Sua Função (ex: Vendedor)">
+
+<button onclick="salvar()">OK</button>
+
+<script>
+function salvar(){
+
+let perfil={
+  apelido:apelido.value,
+  provincia:provincia.value,
+  bairro:bairro.value,
+  funcao:funcao.value
+};
+
+localStorage.setItem("perfil", JSON.stringify(perfil));
+
+if(!localStorage.getItem("fotoPerfil")){
+  window.location.href="foto.html";
+}else{
+  window.location.href="home.html";
+}
+
+}
+</script>
+
+</body>
+</html>
