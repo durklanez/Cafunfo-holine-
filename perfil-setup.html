@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preencher Perfil</title>
+<style>
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+input{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;}
+button{width:100%;padding:15px;background:#22c55e;color:white;border:none;border-radius:10px;}
+</style>
+</head>
+<body>
 
+<h2>Completar Perfil</h2>
+
+<input type="text" id="apelido" placeholder="Apelido">
+<input type="text" id="provincia" placeholder="Província">
+<input type="text" id="bairro" placeholder="Bairro">
+<input type="date" id="nascimento" placeholder="Data de nascimento">
+<input type="text" id="funcao" placeholder="Função/Profissão">
+
+<button onclick="salvarPerfil()">Salvar Perfil</button>
+
+<script>
+function salvarPerfil(){
+  const user = JSON.parse(localStorage.getItem("user"));
+  user.apelido = apelido.value;
+  user.provincia = provincia.value;
+  user.bairro = bairro.value;
+  user.nascimento = nascimento.value;
+  user.funcao = funcao.value;
+  user.perfilPreenchido = true;
+  localStorage.setItem("user", JSON.stringify(user));
+  window.location.href = "principal.html"; // Página principal do app
+}
+</script>
+
+</body>
+</html>
