@@ -1,54 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Perfil</title>
+<title>Completar Perfil</title>
 <style>
-body{
-  font-family:Arial;
-  background:#f1f5f9;
-  padding:20px;
-  text-align:center;
+body {
+  font-family: Arial;
+  background: #f1f5f9;
+  padding: 20px;
 }
-img{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  object-fit:cover;
-  border:4px solid #2563eb;
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
-.card{
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  margin-top:20px;
+button {
+  width: 100%;
+  padding: 15px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 </style>
 </head>
 <body>
 
-<img id="foto">
+<h2>Completar Perfil</h2>
 
-<div class="card">
-<h2 id="nome"></h2>
-<p id="funcao"></p>
-<p id="local"></p>
-<p><strong>Produtos Publicados:</strong> <span id="publicados">0</span></p>
-<p><strong>Produtos Vendidos:</strong> <span id="vendidos">0</span></p>
-</div>
+<input type="text" id="apelido" placeholder="Apelido">
+<input type="text" id="provincia" placeholder="Província">
+<input type="text" id="bairro" placeholder="Bairro">
+<input type="text" id="funcao" placeholder="Função (o que você faz)">
+
+<!-- Botão seguinte -->
+<button id="seguinteBtn" style="display:none;" onclick="irParaPrinc()">Seguinte ➡</button>
 
 <script>
 let user = JSON.parse(localStorage.getItem("user"));
-let perfil = JSON.parse(localStorage.getItem("perfil"));
 
-document.getElementById("foto").src =
-localStorage.getItem("fotoPerfil") || "https://via.placeholder.com/120";
+// Checa se já existe perfil
+if (user && user.perfilCompleto) {
+  // Se já tiver perfil, mostra direto o botão “Seguinte”
+  document.getElementById("seguinteBtn").style.display = "block";
+} else {
+  // Se não, cria evento para preencher perfil
+  let inputs = ["apelido","provincia","bairro","funcao"];
+  inputs.forEach(id => {
+    document.getElementById(id).addEventListener("input", () => {
+      // Mostra botão “Seguinte” só quando todos campos tiverem valor
+      let todosPreenchidos = inputs.every(i => document.getElementById(i).value.trim() !== "");
+      document.getElementById("seguinteBtn").style.display = todosPreenchidos ? "block" : "none";
+    });
+  });
+}
 
-document.getElementById("nome").innerText = user.nomeCompleto;
-document.getElementById("funcao").innerText = perfil.funcao;
-document.getElementById("local").innerText =
-perfil.provincia + " - " + perfil.bairro;
+function irParaPrinc(){
+  // Salva os dados do perfil
+  user.perfil = {
+    apelido: document.getElementById("apelido").value,
+    provincia: document.getElementById("provincia").value,
+    bairro: document.getElementById("bairro").value,
+    funcao: document.getElementById("funcao").value
+  };
+  user.perfilCompleto = true;
+
+  localStorage.setItem("user", JSON.stringify(user));
+
+  // Vai para pasta principal
+  window.location.href = "principal.html"; // <-- aqui você coloca a página principal
+}
 </script>
 
 </body>
