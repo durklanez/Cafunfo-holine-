@@ -3,96 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Criar Conta - Cafunfo Holine</title>
+<title>Criar Conta</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f1f5f9;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.container {
-  background: #fff;
-  padding: 25px 30px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 400px;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2563eb;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  background: #22c55e;
-  color: #000;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.9;
-}
+body{font-family:Arial;background:#f1f5f9;padding:20px;}
+input{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;}
+button{width:100%;padding:15px;background:#2563eb;color:white;border:none;border-radius:10px;}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>Criar Conta</h2>
+<h2>Criar Conta</h2>
 
-  <input type="text" id="nome" placeholder="Nome Completo">
-  <input type="tel" id="numero" placeholder="Número de Telefone">
-  <input type="password" id="senha" placeholder="Senha">
+<input type="text" id="nome" placeholder="Nome completo">
+<input type="tel" id="numero" placeholder="Número">
+<input type="password" id="senha" placeholder="Senha">
 
-  <button onclick="criar()">Continuar</button>
-</div>
+<button onclick="criar()">Continuar</button>
 
 <script>
-function criar() {
-  // pegar os valores dos inputs
-  let nome = document.getElementById("nome").value.trim();
-  let numero = document.getElementById("numero").value.trim();
-  let senha = document.getElementById("senha").value.trim();
-
-  // validação simples
-  if (!nome || !numero || !senha) {
-    alert("Preencha todos os campos!");
-    return;
-  }
-
-  // criar objeto do usuário
-  let user = {
-    nomeCompleto: nome,
-    numero: numero,
-    senha: senha
+function criar(){
+  const user = {
+    nomeCompleto: nome.value,
+    numero: numero.value,
+    senha: senha.value,
+    perfilPreenchido: false
   };
-
-  // salvar no localStorage
   localStorage.setItem("user", JSON.stringify(user));
-
-  // redirecionar para completar perfil
-  window.location.href = "completar-perfil.html";
+  window.location.href = "perfil-setup.html"; // Página para preencher perfil
 }
 </script>
 
