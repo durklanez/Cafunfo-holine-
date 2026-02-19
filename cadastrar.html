@@ -2,119 +2,97 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Vender - Cafunfo Online</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Criar Conta - Cafunfo Holine</title>
 <style>
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
   background: #f1f5f9;
-}
-
-header {
-  background: #2563eb;
-  color: white;
-  padding: 15px;
-  text-align: center;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .container {
-  padding: 15px;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
 }
 
-input, select, textarea {
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2563eb;
+}
+
+input {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 button {
   width: 100%;
   padding: 15px;
   background: #22c55e;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
 }
 
+button:hover {
+  opacity: 0.9;
+}
 </style>
 </head>
-
 <body>
 
-<header>
-<h2>🏪 Publicar Produto</h2>
-</header>
-
 <div class="container">
+  <h2>Criar Conta</h2>
 
-<input type="text" id="nome" placeholder="Nome completo" required>
+  <input type="text" id="nome" placeholder="Nome Completo">
+  <input type="tel" id="numero" placeholder="Número de Telefone">
+  <input type="password" id="senha" placeholder="Senha">
 
-<input type="tel" id="telefone" placeholder="Número de telefone" required>
-
-<input type="text" id="morada" placeholder="Onde mora" required>
-
-<select id="tipo">
-  <option value="Peixe">Peixe</option>
-  <option value="Casa">Casa</option>
-  <option value="Hospedaria">Hospedaria</option>
-  <option value="Serviço de Quarto">Serviço de Quarto</option>
-</select>
-
-<textarea id="descricao" placeholder="Descreva o que está vendendo"></textarea>
-
-<input type="file" id="foto" accept="image/*">
-
-<button onclick="publicar()">📤 Publicar</button>
-
+  <button onclick="criar()">Continuar</button>
 </div>
 
 <script>
-function publicar() {
+function criar() {
+  // pegar os valores dos inputs
+  let nome = document.getElementById("nome").value.trim();
+  let numero = document.getElementById("numero").value.trim();
+  let senha = document.getElementById("senha").value.trim();
 
-  const nome = document.getElementById("nome").value;
-  const telefone = document.getElementById("telefone").value;
-  const morada = document.getElementById("morada").value;
-  const tipo = document.getElementById("tipo").value;
-  const descricao = document.getElementById("descricao").value;
-  const fotoInput = document.getElementById("foto");
-
-  if (!nome || !telefone || !morada || !descricao) {
+  // validação simples
+  if (!nome || !numero || !senha) {
     alert("Preencha todos os campos!");
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function() {
-
-    const produto = {
-      nome,
-      telefone,
-      morada,
-      tipo,
-      descricao,
-      foto: reader.result
-    };
-
-    let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-    produtos.push(produto);
-
-    localStorage.setItem("produtos", JSON.stringify(produtos));
-
-    alert("Produto publicado com sucesso!");
-    window.location.href = "mercado.html";
+  // criar objeto do usuário
+  let user = {
+    nomeCompleto: nome,
+    numero: numero,
+    senha: senha
   };
 
-  if (fotoInput.files[0]) {
-    reader.readAsDataURL(fotoInput.files[0]);
-  } else {
-    reader.onload();
-  }
+  // salvar no localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+
+  // redirecionar para completar perfil
+  window.location.href = "completar-perfil.html";
 }
 </script>
 
