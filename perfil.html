@@ -1,51 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perfil</title>
+<title>Meu Perfil</title>
+
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;}
-input,select{
-  width:100%;
-  padding:12px;
-  margin-bottom:15px;
-  border-radius:8px;
-  border:1px solid #ccc;
+body{
+  font-family:Arial;
+  background:#f1f5f9;
+  margin:0;
+  text-align:center;
 }
-button{
-  width:100%;
-  padding:15px;
-  background:#22c55e;
-  border:none;
-  border-radius:10px;
+
+.header{
+  background:#2563eb;
+  padding:40px 0;
+  color:white;
+}
+
+.foto-container{
+  margin-top:-50px;
+}
+
+.foto-container img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:5px solid white;
+  object-fit:cover;
+}
+
+input{
+  margin-top:20px;
+}
+
+.info{
+  margin-top:20px;
+  font-size:18px;
 }
 </style>
 </head>
+
 <body>
 
-<h2>Completar Perfil</h2>
+<div class="header">
+  <h2>Meu Perfil</h2>
+</div>
+
+<div class="foto-container">
+  <img id="preview" src="https://via.placeholder.com/120" alt="Foto Perfil">
+</div>
 
 <input type="file" id="foto" accept="image/*">
-<input type="text" id="localizacao" placeholder="Localização">
-<select id="funcao">
-<option>Vendedor</option>
-<option>Comerciante</option>
-<option>Agricultor</option>
-</select>
 
-<button onclick="salvar()">Entrar</button>
+<div class="info" id="dados"></div>
 
 <script>
-function salvar(){
-let perfil={
-  foto:foto.value,
-  localizacao:localizacao.value,
-  funcao:funcao.value
-};
-localStorage.setItem("perfil",JSON.stringify(perfil));
-window.location.href="home.html";
+
+// Mostrar nome salvo
+let user = JSON.parse(localStorage.getItem("user"));
+
+if(user){
+  document.getElementById("dados").innerHTML =
+  "<p><strong>"+user.nome+"</strong></p><p>"+user.numero+"</p>";
 }
+
+// Preview da imagem
+document.getElementById("foto").addEventListener("change", function(e){
+  const reader = new FileReader();
+  reader.onload = function(){
+    document.getElementById("preview").src = reader.result;
+    localStorage.setItem("fotoPerfil", reader.result);
+  }
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+// Carregar foto salva
+let fotoSalva = localStorage.getItem("fotoPerfil");
+if(fotoSalva){
+  document.getElementById("preview").src = fotoSalva;
+}
+
 </script>
 
 </body>
