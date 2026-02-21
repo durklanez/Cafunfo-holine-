@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Completar Perfil</title>
 <style>
 body{font-family:Arial;background:#f1f5f9;padding:20px;}
-input{
-  width:100%;
-  padding:10px;
-  margin-bottom:15px;
-}
-button{
-  width:100%;
-  padding:12px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  border-radius:8px;
-}
+input, select{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;}
+button{width:100%;padding:15px;background:#22c55e;color:white;border:none;border-radius:10px;cursor:pointer;margin-bottom:10px;}
 </style>
 </head>
 <body>
 
-<h2>Completar Perfil</h2>
-
+<h2>Preencher Perfil</h2>
 <input type="text" id="apelido" placeholder="Apelido">
 <input type="text" id="provincia" placeholder="Província">
 <input type="text" id="bairro" placeholder="Bairro">
-<input type="text" id="funcao" placeholder="Sua Função (ex: Vendedor)">
-
-<button onclick="salvar()">OK</button>
+<input type="text" id="funcao" placeholder="Função">
+<input type="date" id="nascimento" placeholder="Data de Nascimento">
+<button onclick="salvarPerfil()">Salvar</button>
+<button onclick="seguir()">Seguinte</button>
 
 <script>
-function salvar(){
+let user = JSON.parse(localStorage.getItem("user"));
 
-let perfil={
-  apelido:apelido.value,
-  provincia:provincia.value,
-  bairro:bairro.value,
-  funcao:funcao.value
-};
-
-localStorage.setItem("perfil", JSON.stringify(perfil));
-
-if(!localStorage.getItem("fotoPerfil")){
-  window.location.href="foto.html";
-}else{
-  window.location.href="home.html";
+function salvarPerfil(){
+  if(!apelido.value || !provincia.value || !bairro.value || !funcao.value || !nascimento.value){
+    alert("Preencha todos os campos");
+    return;
+  }
+  user.apelido = apelido.value;
+  user.provincia = provincia.value;
+  user.bairro = bairro.value;
+  user.funcao = funcao.value;
+  user.nascimento = nascimento.value;
+  localStorage.setItem("user", JSON.stringify(user));
+  alert("Perfil salvo!");
 }
 
+function seguir(){
+  localStorage.setItem("user", JSON.stringify(user));
+  window.location.href = "foto.html";
 }
 </script>
 
