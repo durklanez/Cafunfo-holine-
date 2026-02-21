@@ -1,56 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Foto de Perfil</title>
+<title>Adicionar Foto</title>
 <style>
-body{font-family:Arial;text-align:center;padding:20px;background:#f1f5f9;}
-img{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:4px solid #2563eb;
-  object-fit:cover;
-}
-button{
-  padding:12px 20px;
-  margin-top:20px;
-  border:none;
-  border-radius:8px;
-  background:#2563eb;
-  color:white;
-}
+body{font-family:Arial;background:#f1f5f9;padding:20px;text-align:center;}
+button{padding:15px;background:#2563eb;color:white;border:none;border-radius:10px;cursor:pointer;margin-top:15px;}
+img{width:120px;height:120px;border-radius:50%;margin-bottom:15px;object-fit:cover;border:3px solid #22c55e;}
 </style>
 </head>
 <body>
 
-<h2>Carregar Foto de Perfil</h2>
-
-<img id="preview" src="https://via.placeholder.com/120">
-
-<br><br>
-<input type="file" id="foto" accept="image/*">
-
+<h2>Escolher Foto de Perfil</h2>
+<img id="preview" src="https://via.placeholder.com/120" alt="Foto de Perfil">
 <br>
-<button onclick="seguinte()">Seguinte</button>
+<button onclick="carregarFoto()">Carregar Foto</button>
+<br>
+<button onclick="finalizar()">Finalizar</button>
 
 <script>
-document.getElementById("foto").addEventListener("change", function(e){
-  const reader = new FileReader();
-  reader.onload = function(){
-    document.getElementById("preview").src = reader.result;
-    localStorage.setItem("fotoPerfil", reader.result);
-  }
-  reader.readAsDataURL(e.target.files[0]);
-});
+let user = JSON.parse(localStorage.getItem("user"));
 
-function seguinte(){
-  if(!localStorage.getItem("fotoPerfil")){
-    alert("Carregue uma foto primeiro!");
+function carregarFoto(){
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(){
+      user.foto = reader.result;
+      localStorage.setItem("user", JSON.stringify(user));
+      document.getElementById("preview").src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function finalizar(){
+  if(!user.foto){
+    alert("Escolha uma foto antes de continuar!");
     return;
   }
-  window.location.href="completar-perfil.html";
+  localStorage.setItem("user", JSON.stringify(user));
+  window.location.href = "perfil.html";
 }
 </script>
 
