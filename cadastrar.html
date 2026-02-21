@@ -7,29 +7,32 @@
 <style>
 body{font-family:Arial;background:#f1f5f9;padding:20px;}
 input{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;}
-button{width:100%;padding:15px;background:#2563eb;color:white;border:none;border-radius:10px;}
+button{width:100%;padding:15px;background:#2563eb;color:white;border:none;border-radius:10px;cursor:pointer;}
 </style>
 </head>
 <body>
 
 <h2>Criar Conta</h2>
-
-<input type="text" id="nome" placeholder="Nome completo">
+<input type="text" id="nome" placeholder="Nome Completo">
 <input type="tel" id="numero" placeholder="Número">
 <input type="password" id="senha" placeholder="Senha">
-
-<button onclick="criar()">Continuar</button>
+<button onclick="criarConta()">Continuar</button>
 
 <script>
-function criar(){
+function criarConta(){
+  if(!nome.value || !numero.value || !senha.value){
+    alert("Preencha todos os campos");
+    return;
+  }
+
   const user = {
     nomeCompleto: nome.value,
     numero: numero.value,
-    senha: senha.value,
-    perfilPreenchido: false
+    senha: senha.value
   };
+
   localStorage.setItem("user", JSON.stringify(user));
-  window.location.href = "perfil-setup.html"; // Página para preencher perfil
+  window.location.href = "completar-perfil.html";
 }
 </script>
 
