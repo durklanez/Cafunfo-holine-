@@ -5,148 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Perfil</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f1f5f9;
-  margin: 0;
-  padding: 0;
+body{
+  font-family:Arial;
+  background:#f1f5f9;
+  padding:20px;
+  text-align:center;
 }
 
-header {
-  background: #2563eb;
-  color: white;
-  padding: 20px;
-  text-align: center;
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  max-width:400px;
+  margin:auto;
 }
 
-.profile-container {
-  max-width: 500px;
-  margin: 20px auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  text-align: center;
+img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #22c55e;
+  margin-bottom:15px;
 }
 
-.profile-container img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 15px;
-  border: 3px solid #22c55e;
-}
-
-.profile-container h2 {
-  margin: 10px 0 5px;
-  color: #2563eb;
-}
-
-.profile-container p {
-  margin: 5px 0;
-  color: #333;
-}
-
-.products {
-  margin-top: 20px;
-  text-align: left;
-}
-
-.products h3 {
-  color: #22c55e;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 5px;
-}
-
-.product-item {
-  background: #e0f2fe;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 8px;
-}
-
-button {
-  padding: 10px 15px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+  margin-top:10px;
+  cursor:pointer;
 }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Meu Perfil</h1>
-</header>
+<h2>Meu Perfil</h2>
 
-<div class="profile-container" id="perfilContainer">
-  <!-- Perfil vai ser gerado aqui -->
-</div>
+<div class="card" id="perfilBox"></div>
 
 <script>
-// Pega usuário do localStorage
+
 let user = JSON.parse(localStorage.getItem("user"));
 
-// Função para mostrar perfil
-function mostrarPerfil() {
-  const container = document.getElementById("perfilContainer");
-
-  if(!user){
-    // Se usuário não existe, redireciona para criar conta
-    window.location.href = "cadastrar.html";
-    return;
-  }
-
-  // Foto default se não tiver
-  const foto = user.foto || 'https://via.placeholder.com/120';
-
-  // Lista de produtos
-  const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-
-  container.innerHTML = `
-    <img src="${foto}" alt="Foto de Perfil">
-    <h2>${user.nomeCompleto}</h2>
-    <p><strong>Apelido:</strong> ${user.apelido || '-'}</p>
-    <p><strong>Província:</strong> ${user.provincia || '-'}</p>
-    <p><strong>Bairro:</strong> ${user.bairro || '-'}</p>
-    <p><strong>Data de Nascimento:</strong> ${user.nascimento || '-'}</p>
-    <p><strong>Função:</strong> ${user.funcao || '-'}</p>
-    <button onclick="editarFoto()">Alterar Foto</button>
-    
-    <div class="products">
-      <h3>Meus Produtos</h3>
-      ${produtos.length > 0 ? produtos.map(p => `
-        <div class="product-item">
-          <strong>${p.nome}</strong> - ${p.objetivo}
-        </div>`).join('') : '<p>Nenhum produto publicado ainda.</p>'}
-    </div>
-  `;
+if(!user){
+  window.location.href="cadastrar.html";
 }
 
-// Função para trocar foto
-function editarFoto(){
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/*";
-  input.onchange = e => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = function(){
-      user.foto = reader.result; // Salva a imagem no localStorage
-      localStorage.setItem("user", JSON.stringify(user));
-      mostrarPerfil();
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
+function mostrarPerfil(){
+
+let foto = user.foto ? user.foto : "https://via.placeholder.com/120";
+
+document.getElementById("perfilBox").innerHTML = `
+<img src="${foto}">
+<h3>${user.nomeCompleto || ""}</h3>
+
+<p><strong>Apelido:</strong> ${user.apelido ? user.apelido : "-"}</p>
+<p><strong>Província:</strong> ${user.provincia ? user.provincia : "-"}</p>
+<p><strong>Bairro:</strong> ${user.bairro ? user.bairro : "-"}</p>
+<p><strong>Data de Nascimento:</strong> ${user.nascimento ? user.nascimento : "-"}</p>
+<p><strong>Função:</strong> ${user.funcao ? user.funcao : "-"}</p>
+
+<button onclick="alterarFoto()">Alterar Foto</button>
+<button onclick="window.location.href='principal.html'">Seguinte</button>
+`;
+
 }
 
-// Mostra perfil na inicialização
+function alterarFoto(){
+let input = document.createElement("input");
+input.type="file";
+input.accept="image/*";
+
+input.onchange = function(e){
+let file = e.target.files[0];
+let reader = new FileReader();
+
+reader.onload = function(){
+user.foto = reader.result;
+localStorage.setItem("user", JSON.stringify(user));
 mostrarPerfil();
+};
+
+reader.readAsDataURL(file);
+};
+
+input.click();
+}
+
+mostrarPerfil();
+
 </script>
 
 </body>
