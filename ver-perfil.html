@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Perfil</title>
+<style>
+body{font-family:Arial}
+.card{background:#f0f2f5;padding:15px;margin:10px}
+</style>
+</head>
+<body>
 
+<h1 id="nome"></h1>
+<h3>Produtos deste vendedor</h3>
+<div id="lista"></div>
+
+<script>
+
+let nome = localStorage.getItem("perfilVisitado");
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+document.getElementById("nome").innerText = nome;
+
+produtos.forEach(p=>{
+ if(p.dono === nome){
+   document.getElementById("lista").innerHTML += `
+   <div class="card">
+   <h3>${p.nome}</h3>
+   <p>${p.descricao}</p>
+   <strong>${p.preco}</strong>
+   </div>
+   `;
+ }
+});
+
+</script>
+
+</body>
+</html>
