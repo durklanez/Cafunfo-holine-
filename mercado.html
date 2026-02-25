@@ -2,54 +2,36 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado</title>
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;}
-input{
-  width:100%;
-  padding:12px;
-  margin-bottom:20px;
-  border-radius:8px;
-}
-.card{
-  background:white;
-  padding:15px;
-  margin-bottom:10px;
-  border-radius:10px;
-}
+body{font-family:Arial}
+.card{background:#f0f2f5;padding:15px;margin:10px;cursor:pointer}
 </style>
 </head>
 <body>
 
 <h2>Mercado</h2>
-
-<input type="text" id="pesquisa" placeholder="🔍 Pesquisar produto..." onkeyup="buscar()">
-
 <div id="lista"></div>
 
 <script>
-let produtos=JSON.parse(localStorage.getItem("produtos"))||[];
-let lista=document.getElementById("lista");
 
-function mostrar(listaProdutos){
-lista.innerHTML="";
-listaProdutos.forEach(p=>{
-lista.innerHTML+=`
-<div class="card">
-<h3>${p.nome}</h3>
-<p>${p.preco}</p>
-</div>`;
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+produtos.forEach((p,index)=>{
+ document.getElementById("lista").innerHTML += `
+ <div class="card" onclick="verPerfil('${p.dono}')">
+ <h3>${p.nome}</h3>
+ <p>${p.preco}</p>
+ <small>Vendedor: ${p.dono}</small>
+ </div>
+ `;
 });
+
+function verPerfil(nome){
+ localStorage.setItem("perfilVisitado",nome);
+ window.location.href="ver-perfil.html";
 }
 
-function buscar(){
-let termo=pesquisa.value.toLowerCase();
-let filtrados=produtos.filter(p=>p.nome.toLowerCase().includes(termo));
-mostrar(filtrados);
-}
-
-mostrar(produtos);
 </script>
 
 </body>
