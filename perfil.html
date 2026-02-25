@@ -2,101 +2,138 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Perfil</title>
+
 <style>
 body{
-  font-family:Arial;
-  background:#f1f5f9;
-  padding:20px;
+  margin:0;
+  font-family: Arial;
+  background:#f0f2f5;
+}
+
+/* CAPA */
+.capa{
+  height:180px;
+  background: linear-gradient(135deg,#1877f2,#00c6ff);
+}
+
+/* FOTO */
+.foto-container{
   text-align:center;
+  margin-top:-60px;
 }
 
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-  max-width:400px;
-  margin:auto;
-}
-
-img{
+.foto{
   width:120px;
   height:120px;
   border-radius:50%;
+  border:4px solid white;
   object-fit:cover;
-  border:3px solid #22c55e;
+}
+
+/* NOME */
+.nome{
+  text-align:center;
+  font-size:26px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+/* INFO */
+.info{
+  text-align:center;
+  color:#555;
   margin-bottom:15px;
 }
 
+/* BOTÕES */
+.botoes{
+  text-align:center;
+  margin-bottom:20px;
+}
+
 button{
-  padding:10px 15px;
+  padding:10px 20px;
   border:none;
-  border-radius:8px;
-  background:#2563eb;
+  border-radius:6px;
+  background:#1877f2;
   color:white;
-  margin-top:10px;
   cursor:pointer;
+  margin:5px;
+}
+
+/* FEED */
+.feed{
+  max-width:500px;
+  margin:auto;
+}
+
+.post{
+  background:white;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:15px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 <body>
 
-<h2>Meu Perfil</h2>
+<div class="capa"></div>
 
-<div class="card" id="perfilBox"></div>
+<div class="foto-container">
+  <img id="fotoPerfil" class="foto" src="https://via.placeholder.com/120">
+</div>
+
+<div class="nome" id="nomeCompleto">Carregando...</div>
+<div class="info" id="infoPerfil"></div>
+
+<div class="botoes">
+  <button onclick="window.location.href='editar-perfil.html'">Editar Perfil</button>
+  <button onclick="window.location.href='principal.html'">Seguinte</button>
+</div>
+
+<div class="feed">
+  <h3>Publicações</h3>
+  <div id="posts"></div>
+</div>
 
 <script>
 
+// PEGAR DADOS
 let user = JSON.parse(localStorage.getItem("user"));
+let perfil = JSON.parse(localStorage.getItem("perfil"));
 
-if(!user){
-  window.location.href="cadastrar.html";
+// MOSTRAR NOME
+if(user){
+  document.getElementById("nomeCompleto").innerText = user.nomeCompleto;
 }
 
-function mostrarPerfil(){
+// MOSTRAR INFO
+if(perfil){
+  document.getElementById("infoPerfil").innerText =
+    perfil.funcao + " • " +
+    perfil.bairro + ", " +
+    perfil.provincia;
 
-let foto = user.foto ? user.foto : "https://via.placeholder.com/120";
-
-document.getElementById("perfilBox").innerHTML = `
-<img src="${foto}">
-<h3>${user.nomeCompleto || ""}</h3>
-
-<p><strong>Apelido:</strong> ${user.apelido ? user.apelido : "-"}</p>
-<p><strong>Província:</strong> ${user.provincia ? user.provincia : "-"}</p>
-<p><strong>Bairro:</strong> ${user.bairro ? user.bairro : "-"}</p>
-<p><strong>Data de Nascimento:</strong> ${user.nascimento ? user.nascimento : "-"}</p>
-<p><strong>Função:</strong> ${user.funcao ? user.funcao : "-"}</p>
-
-<button onclick="alterarFoto()">Alterar Foto</button>
-<button onclick="window.location.href='principal.html'">Seguinte</button>
-`;
-
+  if(perfil.foto){
+    document.getElementById("fotoPerfil").src = perfil.foto;
+  }
 }
 
-function alterarFoto(){
-let input = document.createElement("input");
-input.type="file";
-input.accept="image/*";
+// MOSTRAR POSTS
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+let postsDiv = document.getElementById("posts");
 
-input.onchange = function(e){
-let file = e.target.files[0];
-let reader = new FileReader();
-
-reader.onload = function(){
-user.foto = reader.result;
-localStorage.setItem("user", JSON.stringify(user));
-mostrarPerfil();
-};
-
-reader.readAsDataURL(file);
-};
-
-input.click();
-}
-
-mostrarPerfil();
+produtos.forEach(p=>{
+  postsDiv.innerHTML += `
+    <div class="post">
+      <strong>${p.nome}</strong>
+      <p>${p.descricao}</p>
+      <small>Preço: ${p.preco}</small>
+    </div>
+  `;
+});
 
 </script>
 
