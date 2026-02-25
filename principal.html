@@ -1,22 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cafunfo Holine</title>
+<title>Publicar</title>
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;text-align:center;}
-button{display:block;margin:15px auto;padding:15px 30px;border:none;border-radius:10px;background:#22c55e;color:#fff;font-size:16px;cursor:pointer;}
+body{font-family:Arial;max-width:600px;margin:auto}
+input,textarea{width:100%;margin:10px 0;padding:8px}
+button{padding:10px;background:#1877f2;color:white;border:none}
 </style>
 </head>
 <body>
 
-<h2>Bem-vindo ao Cafunfo Holine</h2>
+<h2>Publicar Produto</h2>
 
-<button onclick="window.location.href='perfil.html'">Meu Perfil</button>
-<button onclick="window.location.href='minhas-vendas.html'">Minhas Vendas</button>
-<button onclick="window.location.href='publicar-produto.html'">Publicar Produto</button>
-<button onclick="window.location.href='mercado.html'">Ver Produtos</button>
+<input id="nome" placeholder="Nome do produto">
+<textarea id="descricao" placeholder="Descrição"></textarea>
+<input id="preco" placeholder="Preço">
+<button onclick="publicar()">Publicar</button>
+
+<script>
+function publicar(){
+
+let user = JSON.parse(localStorage.getItem("user"));
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+let novo = {
+  dono: user.nomeCompleto,
+  nome: nome.value,
+  descricao: descricao.value,
+  preco: preco.value
+};
+
+produtos.push(novo);
+localStorage.setItem("produtos",JSON.stringify(produtos));
+
+alert("Publicado!");
+window.location.href="perfil.html";
+}
+</script>
 
 </body>
 </html>
