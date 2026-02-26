@@ -2,27 +2,34 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado</title>
 <style>
-body{font-family:Arial}
-.card{background:#f0f2f5;padding:15px;margin:10px;cursor:pointer}
+body{font-family:Arial;background:#f0f2f5}
+.card{
+  background:white;
+  margin:10px;
+  padding:12px;
+  border-radius:8px;
+}
 </style>
 </head>
 <body>
 
-<h2>Mercado</h2>
+<h2 style="text-align:center">Mercado</h2>
+
 <div id="lista"></div>
 
 <script>
 
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
-produtos.forEach((p,index)=>{
+produtos.forEach(p=>{
  document.getElementById("lista").innerHTML += `
  <div class="card" onclick="verPerfil('${p.dono}')">
- <h3>${p.nome}</h3>
- <p>${p.preco}</p>
- <small>Vendedor: ${p.dono}</small>
+   <h3>${p.nome}</h3>
+   <p>${p.preco}</p>
+   <small>${p.dono}</small>
  </div>
  `;
 });
