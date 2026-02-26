@@ -23,7 +23,7 @@ input{
 button{
   width:100%;
   padding:12px;
-  margin-top:10px;
+  margin-top:15px;
   border:none;
   border-radius:8px;
   background:#1877f2;
@@ -44,16 +44,15 @@ button{
 <input id="foto" type="file">
 
 <button onclick="salvar()">Salvar</button>
-<button onclick="seguinte()">Seguinte</button>
 
 <script>
 
 function salvar(){
 
-let reader = new FileReader();
 let file = document.getElementById("foto").files[0];
 
 if(file){
+  let reader = new FileReader();
   reader.onload = function(){
     guardar(reader.result);
   }
@@ -77,11 +76,9 @@ let perfil = {
 
 localStorage.setItem("perfil", JSON.stringify(perfil));
 
-alert("Perfil salvo!");
-}
+// 🔥 Depois de salvar abre nova tela
+window.location.href="principal.html";
 
-function seguinte(){
-window.location.href="perfil.html";
 }
 
 </script>
