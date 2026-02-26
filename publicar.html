@@ -4,35 +4,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Publicar Produto</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f0f2f5;
+  padding:15px;
+}
+input, textarea{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#1877f2;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+</style>
 </head>
 <body>
 
 <h2>Publicar Produto</h2>
 
-<input id="nome" placeholder="Nome do produto"><br><br>
-<textarea id="descricao" placeholder="Descrição"></textarea><br><br>
-<input id="preco" placeholder="Preço"><br><br>
+<input id="nome" placeholder="Nome do produto">
+<textarea id="descricao" placeholder="Descrição"></textarea>
+<input id="preco" placeholder="Preço">
 
 <button onclick="publicar()">Publicar</button>
 
 <script>
+
 function publicar(){
 
 let user = JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+  alert("Usuário não encontrado. Faça login novamente.");
+  window.location.href="index.html";
+  return;
+}
+
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
 let novo = {
-  dono: user.nomeCompleto,
-  nome: nome.value,
-  descricao: descricao.value,
-  preco: preco.value
+  dono: user.nomeCompleto || "Desconhecido",
+  nome: document.getElementById("nome").value,
+  descricao: document.getElementById("descricao").value,
+  preco: document.getElementById("preco").value
 };
 
 produtos.push(novo);
 localStorage.setItem("produtos", JSON.stringify(produtos));
 
+alert("Produto publicado!");
 window.location.href="perfil.html";
+
 }
+
 </script>
 
 </body>
