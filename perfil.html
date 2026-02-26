@@ -2,20 +2,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Perfil</title>
 <style>
-body{font-family:Arial;background:#f0f2f5}
-.container{max-width:900px;margin:auto}
-.card{background:white;padding:15px;margin:10px 0}
+body{font-family:Arial;background:#f0f2f5;margin:0}
+.topo{
+  background:#1877f2;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+.post{
+  background:white;
+  margin:10px;
+  padding:12px;
+  border-radius:8px;
+}
 </style>
 </head>
 <body>
 
-<div class="container">
-<h1 id="nome"></h1>
-<h3>Meus Produtos</h3>
-<div id="meusProdutos"></div>
+<div class="topo">
+<h2 id="nome"></h2>
+<p>Meus Produtos</p>
 </div>
+
+<div id="lista"></div>
 
 <script>
 
@@ -26,8 +38,8 @@ document.getElementById("nome").innerText = user.nomeCompleto;
 
 produtos.forEach(p=>{
  if(p.dono === user.nomeCompleto){
-   document.getElementById("meusProdutos").innerHTML += `
-   <div class="card">
+   document.getElementById("lista").innerHTML += `
+   <div class="post">
    <h3>${p.nome}</h3>
    <p>${p.descricao}</p>
    <strong>${p.preco}</strong>
@@ -39,4 +51,4 @@ produtos.forEach(p=>{
 </script>
 
 </body>
-</html>
+ </html>
