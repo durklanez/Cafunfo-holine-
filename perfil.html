@@ -12,51 +12,72 @@ body{
   background:#f0f2f5;
 }
 
+/* TOPO */
 .topo{
   background:#1877f2;
   color:white;
-  padding:30px 20px;
+  padding:25px 15px;
   text-align:center;
 }
 
+/* FOTO */
 .foto{
-  width:100px;
-  height:100px;
+  width:110px;
+  height:110px;
   border-radius:50%;
-  background:white;
-  margin:auto;
-  margin-top:-50px;
   border:4px solid white;
+  margin-top:-55px;
   object-fit:cover;
+  background:white;
 }
 
+/* INFO */
 .info{
   text-align:center;
   padding:10px;
 }
 
+/* BOTÃO */
+.botao-menu{
+  width:90%;
+  margin:10px auto;
+  display:block;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#1877f2;
+  color:white;
+  font-size:15px;
+}
+
+/* POSTS */
 .post{
   background:white;
   margin:10px;
   padding:12px;
   border-radius:8px;
+  box-shadow:0 2px 4px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 <body>
 
 <div class="topo">
-<h2 id="nome"></h2>
+  <h2 id="nome">Meu Perfil</h2>
 </div>
 
-<img id="foto" class="foto" src="">
+<div style="text-align:center;">
+  <img id="foto" class="foto" src="">
+</div>
 
 <div class="info">
-<p><strong>Apelido:</strong> <span id="apelido"></span></p>
-<p><strong>Província:</strong> <span id="provincia"></span></p>
-<p><strong>Bairro:</strong> <span id="bairro"></span></p>
-<p><strong>Função:</strong> <span id="funcao"></span></p>
+  <p><strong>Apelido:</strong> <span id="apelido">-</span></p>
+  <p><strong>Província:</strong> <span id="provincia">-</span></p>
+  <p><strong>Bairro:</strong> <span id="bairro">-</span></p>
+  <p><strong>Função:</strong> <span id="funcao">-</span></p>
 </div>
+
+<button class="botao-menu" onclick="voltarMenu()">⬅ Voltar ao Menu</button>
 
 <h3 style="padding-left:10px;">Meus Produtos</h3>
 <div id="lista"></div>
@@ -67,32 +88,47 @@ let user = JSON.parse(localStorage.getItem("user"));
 let perfil = JSON.parse(localStorage.getItem("perfil"));
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
-if(user){
+/* NOME */
+if(user && user.nomeCompleto){
   document.getElementById("nome").innerText = user.nomeCompleto;
 }
 
+/* PERFIL */
 if(perfil){
-  document.getElementById("apelido").innerText = perfil.apelido;
-  document.getElementById("provincia").innerText = perfil.provincia;
-  document.getElementById("bairro").innerText = perfil.bairro;
-  document.getElementById("funcao").innerText = perfil.funcao;
+  document.getElementById("apelido").innerText = perfil.apelido || "-";
+  document.getElementById("provincia").innerText = perfil.provincia || "-";
+  document.getElementById("bairro").innerText = perfil.bairro || "-";
+  document.getElementById("funcao").innerText = perfil.funcao || "-";
 
   if(perfil.foto){
     document.getElementById("foto").src = perfil.foto;
+  }else{
+    document.getElementById("foto").src = "https://via.placeholder.com/110";
   }
 }
 
+/* PRODUTOS */
 produtos.forEach(p=>{
-  if(p.dono === user.nomeCompleto){
+  if(user && p.dono === user.nomeCompleto){
+
+    let nome = p.nome || "Sem nome";
+    let descricao = p.descricao || "";
+    let preco = p.preco || "Sem preço";
+
     document.getElementById("lista").innerHTML += `
       <div class="post">
-        <h4>${p.nome}</h4>
-        <p>${p.descricao}</p>
-        <strong>${p.preco}</strong>
+        <h4>${nome}</h4>
+        <p>${descricao}</p>
+        <strong>${preco}</strong>
       </div>
     `;
   }
 });
+
+/* VOLTAR */
+function voltarMenu(){
+  window.location.href = "menu.html";
+}
 
 </script>
 
