@@ -3,52 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Perfil</title>
+<title>Preencher Perfil</title>
+
 <style>
-body{font-family:Arial;background:#f0f2f5;margin:0}
-.topo{
+body{
+  font-family:Arial;
+  background:#f0f2f5;
+  padding:15px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
   background:#1877f2;
   color:white;
-  padding:20px;
-  text-align:center;
-}
-.post{
-  background:white;
-  margin:10px;
-  padding:12px;
-  border-radius:8px;
+  font-size:16px;
 }
 </style>
 </head>
 <body>
 
-<div class="topo">
-<h2 id="nome"></h2>
-<p>Meus Produtos</p>
-</div>
+<h2>Completar Perfil</h2>
 
-<div id="lista"></div>
+<input id="apelido" placeholder="Apelido">
+<input id="provincia" placeholder="Província">
+<input id="bairro" placeholder="Bairro">
+<input id="data" type="date">
+<input id="funcao" placeholder="Função">
+<input id="foto" type="file">
+
+<button onclick="salvar()">Salvar</button>
+<button onclick="seguinte()">Seguinte</button>
 
 <script>
 
-let user = JSON.parse(localStorage.getItem("user"));
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+function salvar(){
 
-document.getElementById("nome").innerText = user.nomeCompleto;
+let reader = new FileReader();
+let file = document.getElementById("foto").files[0];
 
-produtos.forEach(p=>{
- if(p.dono === user.nomeCompleto){
-   document.getElementById("lista").innerHTML += `
-   <div class="post">
-   <h3>${p.nome}</h3>
-   <p>${p.descricao}</p>
-   <strong>${p.preco}</strong>
-   </div>
-   `;
- }
-});
+if(file){
+  reader.onload = function(){
+    guardar(reader.result);
+  }
+  reader.readAsDataURL(file);
+}else{
+  guardar(null);
+}
+
+}
+
+function guardar(fotoBase64){
+
+let perfil = {
+  apelido: apelido.value,
+  provincia: provincia.value,
+  bairro: bairro.value,
+  data: data.value,
+  funcao: funcao.value,
+  foto: fotoBase64
+};
+
+localStorage.setItem("perfil", JSON.stringify(perfil));
+
+alert("Perfil salvo!");
+}
+
+function seguinte(){
+window.location.href="perfil.html";
+}
 
 </script>
 
 </body>
- </html>
+</html>
