@@ -3,83 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preencher Perfil</title>
+<title>Meu Perfil</title>
 
 <style>
 body{
+  margin:0;
   font-family:Arial;
   background:#f0f2f5;
-  padding:15px;
 }
 
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin-top:15px;
-  border:none;
-  border-radius:8px;
+.topo{
   background:#1877f2;
   color:white;
-  font-size:16px;
+  padding:30px 20px;
+  text-align:center;
+}
+
+.foto{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:white;
+  margin:auto;
+  margin-top:-50px;
+  border:4px solid white;
+  object-fit:cover;
+}
+
+.info{
+  text-align:center;
+  padding:10px;
+}
+
+.post{
+  background:white;
+  margin:10px;
+  padding:12px;
+  border-radius:8px;
 }
 </style>
 </head>
 <body>
 
-<h2>Completar Perfil</h2>
+<div class="topo">
+<h2 id="nome"></h2>
+</div>
 
-<input id="apelido" placeholder="Apelido">
-<input id="provincia" placeholder="Província">
-<input id="bairro" placeholder="Bairro">
-<input id="data" type="date">
-<input id="funcao" placeholder="Função">
-<input id="foto" type="file">
+<img id="foto" class="foto" src="">
 
-<button onclick="salvar()">Salvar</button>
+<div class="info">
+<p><strong>Apelido:</strong> <span id="apelido"></span></p>
+<p><strong>Província:</strong> <span id="provincia"></span></p>
+<p><strong>Bairro:</strong> <span id="bairro"></span></p>
+<p><strong>Função:</strong> <span id="funcao"></span></p>
+</div>
+
+<h3 style="padding-left:10px;">Meus Produtos</h3>
+<div id="lista"></div>
 
 <script>
 
-function salvar(){
+let user = JSON.parse(localStorage.getItem("user"));
+let perfil = JSON.parse(localStorage.getItem("perfil"));
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
-let file = document.getElementById("foto").files[0];
+if(user){
+  document.getElementById("nome").innerText = user.nomeCompleto;
+}
 
-if(file){
-  let reader = new FileReader();
-  reader.onload = function(){
-    guardar(reader.result);
+if(perfil){
+  document.getElementById("apelido").innerText = perfil.apelido;
+  document.getElementById("provincia").innerText = perfil.provincia;
+  document.getElementById("bairro").innerText = perfil.bairro;
+  document.getElementById("funcao").innerText = perfil.funcao;
+
+  if(perfil.foto){
+    document.getElementById("foto").src = perfil.foto;
   }
-  reader.readAsDataURL(file);
-}else{
-  guardar(null);
 }
 
-}
-
-function guardar(fotoBase64){
-
-let perfil = {
-  apelido: apelido.value,
-  provincia: provincia.value,
-  bairro: bairro.value,
-  data: data.value,
-  funcao: funcao.value,
-  foto: fotoBase64
-};
-
-localStorage.setItem("perfil", JSON.stringify(perfil));
-
-// 🔥 Depois de salvar abre nova tela
-window.location.href="principal.html";
-
-}
+produtos.forEach(p=>{
+  if(p.dono === user.nomeCompleto){
+    document.getElementById("lista").innerHTML += `
+      <div class="post">
+        <h4>${p.nome}</h4>
+        <p>${p.descricao}</p>
+        <strong>${p.preco}</strong>
+      </div>
+    `;
+  }
+});
 
 </script>
 
