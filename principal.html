@@ -2,20 +2,35 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Publicar</title>
 <style>
-body{font-family:Arial;max-width:600px;margin:auto}
-input,textarea{width:100%;margin:10px 0;padding:8px}
-button{padding:10px;background:#1877f2;color:white;border:none}
+body{font-family:Arial;background:#f0f2f5;padding:15px}
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#1877f2;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
 </style>
 </head>
 <body>
 
-<h2>Publicar Produto</h2>
+<h2>Nova Publicação</h2>
 
 <input id="nome" placeholder="Nome do produto">
 <textarea id="descricao" placeholder="Descrição"></textarea>
 <input id="preco" placeholder="Preço">
+
 <button onclick="publicar()">Publicar</button>
 
 <script>
@@ -34,7 +49,6 @@ let novo = {
 produtos.push(novo);
 localStorage.setItem("produtos",JSON.stringify(produtos));
 
-alert("Publicado!");
 window.location.href="perfil.html";
 }
 </script>
