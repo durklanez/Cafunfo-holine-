@@ -19,7 +19,7 @@ h2{
 
 .container{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap:15px;
 }
 
@@ -28,11 +28,6 @@ h2{
   padding:10px;
   border-radius:10px;
   box-shadow:0 2px 8px rgba(0,0,0,0.1);
-  transition:0.2s;
-}
-
-.card:hover{
-  transform:scale(1.03);
 }
 
 img{
@@ -42,19 +37,29 @@ img{
   border-radius:8px;
 }
 
-h3{
-  font-size:16px;
-  margin:8px 0 5px 0;
-}
-
-p{
-  font-size:14px;
-  color:#555;
+.info{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:8px;
 }
 
 strong{
   color:green;
   font-size:16px;
+}
+
+button{
+  padding:6px 10px;
+  background:green;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:active{
+  transform:scale(0.95);
 }
 </style>
 </head>
@@ -67,21 +72,48 @@ strong{
 
 <script>
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+let ordens = JSON.parse(localStorage.getItem("ordens")) || [];
+
+function comprar(index){
+
+  let produto = produtos[index];
+
+  let novaOrdem = {
+    produto: produto.nome,
+    preco: produto.preco,
+    data: new Date().toLocaleString(),
+    status: "Ordem enviada"
+  };
+
+  ordens.push(novaOrdem);
+  localStorage.setItem("ordens", JSON.stringify(ordens));
+
+  alert("✅ Ordem enviada para o vendedor!");
+
+  // Abrir localização (exemplo Google Maps)
+  window.open("https://www.google.com/maps", "_blank");
+
+}
 
 if(produtos.length === 0){
   document.getElementById("lista").innerHTML = "<p>Nenhum produto publicado ainda.</p>";
 }
 
-produtos.forEach(p=>{
+produtos.forEach((p,index)=>{
 
   let foto = p.foto ? p.foto : "https://via.placeholder.com/300";
 
   document.getElementById("lista").innerHTML += `
     <div class="card">
       <img src="${foto}">
-      <h3>${p.nome || "Sem nome"}</h3>
-      <p>${p.descricao || ""}</p>
-      <strong>${p.preco || ""}</strong>
+      <h3>${p.nome}</h3>
+      <p>${p.descricao}</p>
+
+      <div class="info">
+        <strong>${p.preco}</strong>
+        <button onclick="comprar(${index})">Comprar</button>
+      </div>
+
     </div>
   `;
 });
