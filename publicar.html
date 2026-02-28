@@ -11,6 +11,7 @@ body{
   background:#f0f2f5;
   padding:15px;
 }
+
 input, textarea{
   width:100%;
   padding:12px;
@@ -18,6 +19,7 @@ input, textarea{
   border-radius:8px;
   border:1px solid #ccc;
 }
+
 button{
   width:100%;
   padding:12px;
@@ -26,12 +28,19 @@ button{
   border:none;
   border-radius:8px;
 }
+
+img{
+  width:100%;
+  margin-top:10px;
+  border-radius:8px;
+}
 </style>
 </head>
 <body>
 
 <h2>Publicar Produto</h2>
 
+<input type="file" id="foto">
 <input id="nome" placeholder="Nome do produto">
 <textarea id="descricao" placeholder="Descrição"></textarea>
 <input id="preco" placeholder="Preço">
@@ -43,20 +52,30 @@ button{
 function publicar(){
 
 let user = JSON.parse(localStorage.getItem("user"));
-
 if(!user){
-  alert("Usuário não encontrado. Faça login novamente.");
-  window.location.href="index.html";
+  alert("Faça login novamente.");
   return;
 }
+
+let file = document.getElementById("foto").files[0];
+
+if(!file){
+  alert("Escolhe uma foto!");
+  return;
+}
+
+let reader = new FileReader();
+
+reader.onload = function(){
 
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
 let novo = {
-  dono: user.nomeCompleto || "Desconhecido",
+  dono: user.nomeCompleto,
   nome: document.getElementById("nome").value,
   descricao: document.getElementById("descricao").value,
-  preco: document.getElementById("preco").value
+  preco: document.getElementById("preco").value,
+  foto: reader.result
 };
 
 produtos.push(novo);
@@ -64,6 +83,10 @@ localStorage.setItem("produtos", JSON.stringify(produtos));
 
 alert("Produto publicado!");
 window.location.href="perfil.html";
+
+};
+
+reader.readAsDataURL(file);
 
 }
 
