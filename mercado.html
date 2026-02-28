@@ -4,19 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado</title>
+
 <style>
-body{font-family:Arial;background:#f0f2f5}
+body{
+  font-family:Arial;
+  background:#f0f2f5;
+  margin:0;
+  padding:10px;
+}
+
 .card{
   background:white;
-  margin:10px;
+  margin-bottom:15px;
   padding:12px;
   border-radius:8px;
+  box-shadow:0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card img{
+  width:100%;
+  border-radius:8px;
+  margin-bottom:8px;
+}
+
+.botao{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#1877f2;
+  color:white;
+  margin-bottom:15px;
 }
 </style>
 </head>
 <body>
 
-<h2 style="text-align:center">Mercado</h2>
+<button class="botao" onclick="voltar()">⬅ Voltar ao Menu</button>
+
+<h2>Mercado</h2>
 
 <div id="lista"></div>
 
@@ -25,18 +51,23 @@ body{font-family:Arial;background:#f0f2f5}
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
 produtos.forEach(p=>{
- document.getElementById("lista").innerHTML += `
- <div class="card" onclick="verPerfil('${p.dono}')">
-   <h3>${p.nome}</h3>
-   <p>${p.preco}</p>
-   <small>${p.dono}</small>
- </div>
- `;
+  document.getElementById("lista").innerHTML += `
+    <div class="card" onclick="verPerfil('${p.dono}')">
+      <img src="${p.foto || 'https://via.placeholder.com/300'}">
+      <h3>${p.nome || "Sem nome"}</h3>
+      <p>${p.preco || "Sem preço"}</p>
+      <small>${p.dono}</small>
+    </div>
+  `;
 });
 
 function verPerfil(nome){
- localStorage.setItem("perfilVisitado",nome);
- window.location.href="ver-perfil.html";
+  localStorage.setItem("perfilVisitado", nome);
+  window.location.href="ver-perfil.html";
+}
+
+function voltar(){
+  window.location.href="menu.html";
 }
 
 </script>
