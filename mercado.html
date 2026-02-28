@@ -5,122 +5,124 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado - Cafunfo</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
 <style>
-body{
-  font-family:Arial;
-  margin:0;
-  background:#f2f2f2;
+body {
+  font-family: Arial;
+  background: #f2f2f2;
+  padding: 15px;
+  margin: 0;
 }
 
-#map{
-  height:300px;
+.card {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.container{
-  padding:15px;
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 
-.card{
-  background:#fff;
-  padding:10px;
-  margin-bottom:15px;
-  border-radius:10px;
+h3 {
+  margin: 10px 0 5px 0;
 }
 
-.info{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+p {
+  margin: 5px 0;
 }
 
-strong{
-  color:green;
+strong {
+  color: green;
+  font-size: 18px;
 }
 
-button{
-  background:green;
-  color:white;
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
+button {
+  padding: 10px;
+  width: 100%;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #16a34a;
 }
 </style>
 </head>
-
 <body>
 
-<h2 style="text-align:center;">🛒 Mercado</h2>
-
-<div id="map"></div>
-
-<div class="container" id="lista"></div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<h2>🛒 Mercado Cafunfo</h2>
+<div id="listaProdutos"></div>
 
 <script>
+// Função para carregar produtos
+function carregarProdutos(){
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  let container = document.getElementById("listaProdutos");
+  container.innerHTML = "";
 
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  if(produtos.length === 0){
+    container.innerHTML = "<p>Nenhum produto publicado ainda.</p>";
+    return;
+  }
 
-// CRIAR MAPA
-let map = L.map('map').setView([ -8.8383, 13.2344 ], 13); // Luanda padrão
+  produtos.forEach((produto, index) => {
+    let card = document.createElement("div");
+    card.className = "card";
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: 'Cafunfo Map'
-}).addTo(map);
+    card.innerHTML = `
+      <img src="${produto.foto || 'https://via.placeholder.com/300x200'}" alt="${produto.nome}">
+      <h3>${produto.nome}</h3>
+      <p>${produto.descricao || ''}</p>
+      <strong>${produto.preco ? produto.preco + " AKZ" : "Preço não definido"}</strong>
+      <button onclick="comprar(${index})">Comprar</button>
+    `;
 
-// PEGAR LOCALIZAÇÃO DO USUÁRIO
-navigator.geolocation.getCurrentPosition(function(position){
-
-  let lat = position.coords.latitude;
-  let lon = position.coords.longitude;
-
-  map.setView([lat, lon], 14);
-
-  // MARCADOR COMPRADOR (VERDE)
-  L.circleMarker([lat, lon], {
-    color: 'green',
-    radius:8
-  }).addTo(map).bindPopup("Você (Comprador)").openPopup();
-
-});
-
-function comprar(index){
-
-  let produto = produtos[index];
-
-  alert("✅ Ordem enviada!");
-
-  // MARCADOR VENDEDOR (VERMELHO ALEATÓRIO PARA EXEMPLO)
-  let vendedorLat = -8.83 + (Math.random() * 0.02);
-  let vendedorLon = 13.23 + (Math.random() * 0.02);
-
-  L.circleMarker([vendedorLat, vendedorLon], {
-    color: 'red',
-    radius:8
-  }).addTo(map).bindPopup("Vendedor: " + produto.nome);
-
+    container.appendChild(card);
+  });
 }
 
-produtos.forEach((p,index)=>{
+// Função comprar (usar a que te enviei antes)
+function comprar(index){
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  let ordens = JSON.parse(localStorage.getItem("ordens")) || [];
 
-  let foto = p.foto ? p.foto : "https://via.placeholder.com/300";
+  let produto = produtos[index];
+  if(!produto){
+    alert("Produto não encontrado.");
+    return;
+  }
 
-  document.getElementById("lista").innerHTML += `
-    <div class="card">
-      <img src="${foto}" style="width:100%;border-radius:8px;">
-      <h3>${p.nome}</h3>
-      <p>${p.descricao}</p>
+  let idOrdem = Date.now();
+  let novaOrdem = {
+    id: idOrdem,
+    nome: produto.nome,
+    preco: produto.preco,
+    descricao: produto.descricao || "",
+    foto: produto.foto || "",
+    data: new Date().toLocaleString(),
+    status: "Ordem enviada",
+    vendedorLat: produto.lat || (-8.83 + Math.random()*0.02),
+    vendedorLon: produto.lon || (13.23 + Math.random()*0.02)
+  };
 
-      <div class="info">
-        <strong>${p.preco}</strong>
-        <button onclick="comprar(${index})">Comprar</button>
-      </div>
-    </div>
-  `;
-});
+  localStorage.setItem("ordemAtual", JSON.stringify(novaOrdem));
+  ordens.push(novaOrdem);
+  localStorage.setItem("ordens", JSON.stringify(ordens));
 
+  alert("✅ Ordem enviada com sucesso!");
+  window.location.href = "ordem.html";
+}
+
+// Carrega produtos assim que abre a página
+carregarProdutos();
 </script>
 
 </body>
