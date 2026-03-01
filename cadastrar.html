@@ -2,37 +2,87 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Criar Conta</title>
+<title>Registro - Cafunfo</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <style>
-body{font-family:Arial;background:#f1f5f9;padding:20px;}
-input{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;}
-button{width:100%;padding:15px;background:#2563eb;color:white;border:none;border-radius:10px;cursor:pointer;}
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #8360c3, #2ebf91);
+    color: white;
+    padding: 20px;
+}
+
+input, button {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    background: #fff;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#map {
+    height: 300px;
+    margin-top: 15px;
+    border-radius: 10px;
+}
 </style>
 </head>
+
 <body>
 
-<h2>Criar Conta</h2>
-<input type="text" id="nome" placeholder="Nome Completo">
-<input type="tel" id="numero" placeholder="Número">
-<input type="password" id="senha" placeholder="Senha">
-<button onclick="criarConta()">Continuar</button>
+<h2>📍 Criar Conta - Cafunfo</h2>
+
+<input type="text" placeholder="Seu nome" id="nome">
+<input type="text" placeholder="Onde você mora? (Ex: Vila, Terra Nova)" id="endereco">
+
+<button onclick="pegarLocalizacao()">Usar minha localização atual</button>
+
+<input type="text" id="latitude" placeholder="Latitude" readonly>
+<input type="text" id="longitude" placeholder="Longitude" readonly>
+
+<div id="map"></div>
 
 <script>
-function criarConta(){
-  if(!nome.value || !numero.value || !senha.value){
-    alert("Preencha todos os campos");
-    return;
-  }
+var map = L.map('map').setView([-8.7693, 16.3120], 13); // Centro exemplo Angola
 
-  const user = {
-    nomeCompleto: nome.value,
-    numero: numero.value,
-    senha: senha.value
-  };
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
 
-  localStorage.setItem("user", JSON.stringify(user));
-  window.location.href = "completar-perfil.html";
+var marker;
+
+function pegarLocalizacao() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+
+            map.setView([lat, lon], 15);
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup("📍 Você está aqui agora!")
+                .openPopup();
+        });
+    } else {
+        alert("GPS não suportado");
+    }
 }
 </script>
 
