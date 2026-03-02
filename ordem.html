@@ -1,40 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Ordem</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
-<style>
-body{
-  font-family:Arial;
-  margin:0;
-  background:#f2f2f2;
-}
-
-#map{
-  height:350px;
-}
-
-.info{
-  padding:15px;
-  background:white;
-}
-</style>
-</head>
-
-<body>
-
-<h2 style="text-align:center;">📦 Ordem Enviada</h2>
-
-<div class="info" id="dados"></div>
-
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script>
 
 let ordem = JSON.parse(localStorage.getItem("ordemAtual"));
@@ -50,18 +13,31 @@ document.getElementById("dados").innerHTML = `
   <p>Status: Ordem enviada</p>
 `;
 
-// Criar mapa
-let map = L.map('map').setView([ordem.vendedorLat, ordem.vendedorLon], 14);
+/* 📍 COORDENADAS DO CAFUNFO (aproximado) */
+let cafunfoBounds = [
+  [-8.770, 20.400], // SUL-OESTE
+  [-8.720, 20.470]  // NORTE-LESTE
+];
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+/* Criar mapa já focado no Cafunfo */
+let map = L.map('map', {
+  maxBounds: cafunfoBounds,
+  maxBoundsViscosity: 1.0
+}).fitBounds(cafunfoBounds);
 
-// VENDEDOR 🔴
+/* Mapa base */
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  minZoom: 13,
+  maxZoom: 18
+}).addTo(map);
+
+// 🔴 VENDEDOR
 L.circleMarker([ordem.vendedorLat, ordem.vendedorLon], {
   color: 'red',
   radius:8
 }).addTo(map).bindPopup("Vendedor");
 
-// COMPRADOR 🟢
+// 🟢 COMPRADOR
 navigator.geolocation.getCurrentPosition(function(position){
 
   let lat = position.coords.latitude;
@@ -75,6 +51,3 @@ navigator.geolocation.getCurrentPosition(function(position){
 });
 
 </script>
-
-</body>
-</html>
