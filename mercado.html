@@ -59,19 +59,19 @@ button {
 
 <script>
 
-// 📍 LIMITES DO CAFUNFO
+// 📍 LIMITES DO CAFUNFO (ajuste se quiser)
 let cafunfoBounds = [
   [-8.770, 20.400], // SUL-OESTE
   [-8.720, 20.470]  // NORTE-LESTE
 ];
 
-// Produtos exemplo (se não existir nada salvo)
+// Produto exemplo automático
 if(!localStorage.getItem("produtos")){
   let exemplo = [
     {
-      nome: "iPhone",
-      preco: "3000",
-      vendedorLat: -8.750,
+      nome: "Telefone Samsung",
+      preco: "25000",
+      vendedorLat: -8.745,
       vendedorLon: 20.440
     }
   ];
@@ -105,10 +105,17 @@ function comprar(index){
   document.getElementById("map").style.display = "block";
   document.getElementById("tituloMapa").style.display = "block";
 
+  // Se já existir mapa, remove
+  if(window.meuMapa){
+    window.meuMapa.remove();
+  }
+
   let map = L.map('map', {
     maxBounds: cafunfoBounds,
     maxBoundsViscosity: 1.0
   }).fitBounds(cafunfoBounds);
+
+  window.meuMapa = map;
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     minZoom: 14,
@@ -136,6 +143,10 @@ function comprar(index){
     });
   }
 
+  // 🔥 Corrige bug do mapa branco
+  setTimeout(function(){
+    map.invalidateSize();
+  }, 300);
 }
 
 carregarProdutos();
