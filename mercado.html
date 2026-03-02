@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado - Cafunfo</title>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <style>
 body {
   font-family: Arial;
   background: #f2f2f2;
-  padding: 15px;
   margin: 0;
+  padding: 15px;
 }
 
 .card {
@@ -19,20 +22,6 @@ body {
   margin-bottom: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-h3 {
-  margin: 10px 0 5px 0;
-}
-
-p {
-  margin: 5px 0;
 }
 
 strong {
@@ -51,37 +40,56 @@ button {
   font-weight: bold;
 }
 
-button:hover {
-  background: #16a34a;
+#map {
+  height: 350px;
+  margin-top: 20px;
+  border-radius: 10px;
+  display: none;
 }
 </style>
 </head>
+
 <body>
 
 <h2>🛒 Mercado Cafunfo</h2>
 <div id="listaProdutos"></div>
 
+<h3 id="tituloMapa" style="display:none;">📍 Localização da Ordem</h3>
+<div id="map"></div>
+
 <script>
-// Função para carregar produtos
+
+// 📍 LIMITES DO CAFUNFO
+let cafunfoBounds = [
+  [-8.770, 20.400], // SUL-OESTE
+  [-8.720, 20.470]  // NORTE-LESTE
+];
+
+// Produtos exemplo (se não existir nada salvo)
+if(!localStorage.getItem("produtos")){
+  let exemplo = [
+    {
+      nome: "iPhone",
+      preco: "3000",
+      vendedorLat: -8.750,
+      vendedorLon: 20.440
+    }
+  ];
+  localStorage.setItem("produtos", JSON.stringify(exemplo));
+}
+
 function carregarProdutos(){
   let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
   let container = document.getElementById("listaProdutos");
   container.innerHTML = "";
-
-  if(produtos.length === 0){
-    container.innerHTML = "<p>Nenhum produto publicado ainda.</p>";
-    return;
-  }
 
   produtos.forEach((produto, index) => {
     let card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <img src="${produto.foto || 'https://via.placeholder.com/300x200'}" alt="${produto.nome}">
       <h3>${produto.nome}</h3>
-      <p>${produto.descricao || ''}</p>
-      <strong>${produto.preco ? produto.preco + " AKZ" : "Preço não definido"}</strong>
+      <strong>${produto.preco} AKZ</strong>
       <button onclick="comprar(${index})">Comprar</button>
     `;
 
@@ -89,40 +97,49 @@ function carregarProdutos(){
   });
 }
 
-// Função comprar (usar a que te enviei antes)
 function comprar(index){
-  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-  let ordens = JSON.parse(localStorage.getItem("ordens")) || [];
 
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
   let produto = produtos[index];
-  if(!produto){
-    alert("Produto não encontrado.");
-    return;
+
+  document.getElementById("map").style.display = "block";
+  document.getElementById("tituloMapa").style.display = "block";
+
+  let map = L.map('map', {
+    maxBounds: cafunfoBounds,
+    maxBoundsViscosity: 1.0
+  }).fitBounds(cafunfoBounds);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    minZoom: 14,
+    maxZoom: 18
+  }).addTo(map);
+
+  // 🔴 VENDEDOR
+  L.circleMarker([produto.vendedorLat, produto.vendedorLon], {
+    color: 'red',
+    radius: 8
+  }).addTo(map).bindPopup("Vendedor").openPopup();
+
+  // 🟢 COMPRADOR
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(position){
+
+      let lat = position.coords.latitude;
+      let lon = position.coords.longitude;
+
+      L.circleMarker([lat, lon], {
+        color: 'green',
+        radius: 8
+      }).addTo(map).bindPopup("Você (Comprador)");
+
+    });
   }
 
-  let idOrdem = Date.now();
-  let novaOrdem = {
-    id: idOrdem,
-    nome: produto.nome,
-    preco: produto.preco,
-    descricao: produto.descricao || "",
-    foto: produto.foto || "",
-    data: new Date().toLocaleString(),
-    status: "Ordem enviada",
-    vendedorLat: produto.lat || (-8.83 + Math.random()*0.02),
-    vendedorLon: produto.lon || (13.23 + Math.random()*0.02)
-  };
-
-  localStorage.setItem("ordemAtual", JSON.stringify(novaOrdem));
-  ordens.push(novaOrdem);
-  localStorage.setItem("ordens", JSON.stringify(ordens));
-
-  alert("✅ Ordem enviada com sucesso!");
-  window.location.href = "ordem.html";
 }
 
-// Carrega produtos assim que abre a página
 carregarProdutos();
+
 </script>
 
 </body>
