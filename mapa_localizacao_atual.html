@@ -2,51 +2,57 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Mapa Atual - Cafunfo</title>
+<title>Mapa Cafunfo</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
 body {
+    margin:0;
     font-family: Arial;
-    background: #111;
-    color: white;
-    padding: 20px;
 }
-
 #map {
-    height: 400px;
-    border-radius: 12px;
+    height: 100vh;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🌍 Sua Localização Atual</h2>
-
 <div id="map"></div>
 
 <script>
-var map = L.map('map').setView([0,0], 2);
 
+// Coordenadas centrais de Cafunfo
+var centroCafunfo = [-8.7667, 20.7833];
+
+// Limites aproximados (Norte, Sul, Leste, Oeste)
+var limitesCafunfo = L.latLngBounds(
+    [-8.80, 20.75],  // Sul-Oeste
+    [-8.73, 20.82]   // Norte-Leste
+);
+
+// Criar mapa já focado em Cafunfo
+var map = L.map('map', {
+    center: centroCafunfo,
+    zoom: 15,
+    minZoom: 14,
+    maxZoom: 18,
+    maxBounds: limitesCafunfo,
+    maxBoundsViscosity: 1.0
+});
+
+// Camada do mapa
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
+    attribution: 'Mapa Cafunfo'
 }).addTo(map);
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
+// Marcador central
+L.marker(centroCafunfo).addTo(map)
+    .bindPopup("📍 Centro de Cafunfo")
+    .openPopup();
 
-        map.setView([lat, lon], 16);
-
-        L.marker([lat, lon]).addTo(map)
-            .bindPopup("📍 Você está aqui agora!")
-            .openPopup();
-    });
-}
 </script>
 
 </body>
