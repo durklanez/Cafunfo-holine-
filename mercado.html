@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado - Cafunfo</title>
 
+<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
 body {
   font-family: Arial;
   background: #f2f2f2;
-  margin: 0;
   padding: 15px;
+  margin: 0;
 }
 
 .card {
@@ -22,6 +22,20 @@ body {
   margin-bottom: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+h3 {
+  margin: 10px 0 5px 0;
+}
+
+p {
+  margin: 5px 0;
 }
 
 strong {
@@ -40,56 +54,58 @@ button {
   font-weight: bold;
 }
 
+button:hover {
+  background: #16a34a;
+}
+
 #map {
   height: 350px;
-  margin-top: 20px;
-  border-radius: 10px;
+  margin-top: 15px;
   display: none;
+  border-radius: 12px;
+}
+
+#tituloMapa {
+  display: none;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
 <h2>🛒 Mercado Cafunfo</h2>
 <div id="listaProdutos"></div>
 
-<h3 id="tituloMapa" style="display:none;">📍 Localização da Ordem</h3>
+<h3 id="tituloMapa">🌍 Localização da Ordem</h3>
 <div id="map"></div>
 
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
-
-// 📍 LIMITES DO CAFUNFO (ajuste se quiser)
-let cafunfoBounds = [
-  [-8.770, 20.400], // SUL-OESTE
-  [-8.720, 20.470]  // NORTE-LESTE
-];
-
-// Produto exemplo automático
-if(!localStorage.getItem("produtos")){
-  let exemplo = [
-    {
-      nome: "Telefone Samsung",
-      preco: "25000",
-      vendedorLat: -8.745,
-      vendedorLon: 20.440
-    }
-  ];
-  localStorage.setItem("produtos", JSON.stringify(exemplo));
-}
-
+// Função para carregar produtos
 function carregarProdutos(){
   let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
   let container = document.getElementById("listaProdutos");
   container.innerHTML = "";
+
+  if(produtos.length === 0){
+    container.innerHTML = "<p>Nenhum produto publicado ainda.</p>";
+    return;
+  }
 
   produtos.forEach((produto, index) => {
     let card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
+      <img src="${produto.foto || 'https://via.placeholder.com/300x200'}" alt="${produto.nome}">
       <h3>${produto.nome}</h3>
-      <strong>${produto.preco} AKZ</strong>
+      <p>${produto.descricao || ''}</p>
+      <strong>${produto.preco ? produto.preco + " AKZ" : "Preço não definido"}</strong>
       <button onclick="comprar(${index})">Comprar</button>
     `;
 
@@ -97,60 +113,81 @@ function carregarProdutos(){
   });
 }
 
+// Função comprar com mapa Cafunfo
 function comprar(index){
 
   let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+  if(!produtos[index]){
+    alert("Produto não encontrado.");
+    return;
+  }
+
   let produto = produtos[index];
 
-  document.getElementById("map").style.display = "block";
-  document.getElementById("tituloMapa").style.display = "block";
+  let vendedorLat = produto.vendedorLat || -8.745; // centro Cafunfo
+  let vendedorLon = produto.vendedorLon || 20.440;
 
-  // Se já existir mapa, remove
-  if(window.meuMapa){
-    window.meuMapa.remove();
-  }
+  let mapaDiv = document.getElementById("map");
+  let titulo = document.getElementById("tituloMapa");
 
-  let map = L.map('map', {
-    maxBounds: cafunfoBounds,
-    maxBoundsViscosity: 1.0
-  }).fitBounds(cafunfoBounds);
+  mapaDiv.style.display = "block";
+  titulo.style.display = "block";
 
-  window.meuMapa = map;
+  let cafunfoBounds = [
+    [-8.770, 20.400], // SUL-OESTE
+    [-8.720, 20.470]  // NORTE-LESTE
+  ];
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    minZoom: 14,
-    maxZoom: 18
-  }).addTo(map);
-
-  // 🔴 VENDEDOR
-  L.circleMarker([produto.vendedorLat, produto.vendedorLon], {
-    color: 'red',
-    radius: 8
-  }).addTo(map).bindPopup("Vendedor").openPopup();
-
-  // 🟢 COMPRADOR
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(function(position){
-
-      let lat = position.coords.latitude;
-      let lon = position.coords.longitude;
-
-      L.circleMarker([lat, lon], {
-        color: 'green',
-        radius: 8
-      }).addTo(map).bindPopup("Você (Comprador)");
-
-    });
-  }
-
-  // 🔥 Corrige bug do mapa branco
   setTimeout(function(){
-    map.invalidateSize();
+
+    if(window.meuMapa){
+      window.meuMapa.remove();
+    }
+
+    let map = L.map('map', {
+      maxBounds: cafunfoBounds,
+      maxBoundsViscosity: 1.0
+    }).setView([vendedorLat, vendedorLon], 15);
+
+    window.meuMapa = map;
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    // 🔴 Vendedor
+    L.marker([vendedorLat, vendedorLon])
+      .addTo(map)
+      .bindPopup("📍 Vendedor")
+      .openPopup();
+
+    // 🟢 Comprador
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(function(position){
+
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+
+        L.marker([lat, lon])
+          .addTo(map)
+          .bindPopup("🟢 Você (Comprador)");
+
+      }, function(){
+        alert("Permita a localização para mostrar sua posição.");
+      });
+    }
+
+    setTimeout(function(){
+      map.invalidateSize();
+    }, 300);
+
   }, 300);
 }
 
+// Carrega produtos assim que abre a página
 carregarProdutos();
-
 </script>
 
 </body>
