@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado - Cafunfo</title>
 
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
@@ -72,7 +71,6 @@ button:hover {
   margin-top: 10px;
 }
 </style>
-
 </head>
 <body>
 
@@ -82,7 +80,6 @@ button:hover {
 <h3 id="tituloMapa">🌍 Localização da Ordem</h3>
 <div id="map"></div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
@@ -113,7 +110,7 @@ function carregarProdutos(){
   });
 }
 
-// Função comprar com mapa Cafunfo
+// Função comprar com mapa limitado ao Cafunfo
 function comprar(index){
 
   let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
@@ -125,15 +122,13 @@ function comprar(index){
 
   let produto = produtos[index];
 
-  let vendedorLat = produto.vendedorLat || -8.745; // centro Cafunfo
-  let vendedorLon = produto.vendedorLon || 20.440;
-
   let mapaDiv = document.getElementById("map");
   let titulo = document.getElementById("tituloMapa");
 
   mapaDiv.style.display = "block";
   titulo.style.display = "block";
 
+  // Limites Cafunfo (exemplo)
   let cafunfoBounds = [
     [-8.770, 20.400], // SUL-OESTE
     [-8.720, 20.470]  // NORTE-LESTE
@@ -148,17 +143,17 @@ function comprar(index){
     let map = L.map('map', {
       maxBounds: cafunfoBounds,
       maxBoundsViscosity: 1.0
-    }).setView([vendedorLat, vendedorLon], 15);
+    }).setView([produto.vendedorLat || -8.745, produto.vendedorLon || 20.440], 15);
 
     window.meuMapa = map;
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
     // 🔴 Vendedor
-    L.marker([vendedorLat, vendedorLon])
+    L.marker([produto.vendedorLat || -8.745, produto.vendedorLon || 20.440])
       .addTo(map)
       .bindPopup("📍 Vendedor")
       .openPopup();
@@ -166,14 +161,9 @@ function comprar(index){
     // 🟢 Comprador
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(function(position){
-
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        L.marker([lat, lon])
+        L.marker([position.coords.latitude, position.coords.longitude])
           .addTo(map)
           .bindPopup("🟢 Você (Comprador)");
-
       }, function(){
         alert("Permita a localização para mostrar sua posição.");
       });
