@@ -1,8 +1,166 @@
-  }
-});
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil - Cafunfo</title>
 
-function voltar(){
-  window.location.href="menu.html";
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f2f2f2;
+  margin:0;
+  padding:20px;
 }
 
-</scr
+.container{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+#fotoPerfil{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #22c55e;
+}
+
+h2{
+  margin:15px 0;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn-editar{
+  background:#3b82f6;
+  color:white;
+}
+
+.btn-foto{
+  background:#22c55e;
+  color:white;
+}
+
+.btn-voltar{
+  background:#6b7280;
+  color:white;
+}
+
+.produtos{
+  margin-top:30px;
+  text-align:left;
+}
+
+.produto{
+  background:#fafafa;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:10px;
+  border:1px solid #ddd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <img id="fotoPerfil" src="https://via.placeholder.com/130">
+
+  <h2 id="nomePerfil">Sem Nome</h2>
+
+  <button class="btn-editar" onclick="editarNome()">
+    ✏ EDITAR NOME
+  </button>
+
+  <button class="btn-foto" onclick="document.getElementById('inputFoto').click()">
+    📷 CARREGAR FOTO
+  </button>
+
+  <input type="file" id="inputFoto" accept="image/*" style="display:none" onchange="carregarFoto(event)">
+
+  <button class="btn-voltar" onclick="history.back()">
+    ⬅ VOLTAR
+  </button>
+
+</div>
+
+<div class="produtos">
+  <h3>Meus Produtos</h3>
+  <div id="listaProdutos"></div>
+</div>
+
+<script>
+
+// Carregar nome salvo
+let nomeSalvo = localStorage.getItem("nomeUsuario");
+if(nomeSalvo){
+  document.getElementById("nomePerfil").innerText = nomeSalvo;
+}
+
+// Carregar foto salva
+let fotoSalva = localStorage.getItem("fotoUsuario");
+if(fotoSalva){
+  document.getElementById("fotoPerfil").src = fotoSalva;
+}
+
+// Editar nome
+function editarNome(){
+  let novoNome = prompt("Digite seu novo nome:");
+  if(novoNome){
+    localStorage.setItem("nomeUsuario", novoNome);
+    document.getElementById("nomePerfil").innerText = novoNome;
+  }
+}
+
+// Carregar foto
+function carregarFoto(event){
+  let reader = new FileReader();
+  reader.onload = function(){
+    localStorage.setItem("fotoUsuario", reader.result);
+    document.getElementById("fotoPerfil").src = reader.result;
+  }
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+// Mostrar produtos
+function carregarProdutos(){
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  let container = document.getElementById("listaProdutos");
+  container.innerHTML = "";
+
+  if(produtos.length === 0){
+    container.innerHTML = "<p>Nenhum produto publicado.</p>";
+    return;
+  }
+
+  produtos.forEach(produto=>{
+    let div = document.createElement("div");
+    div.className = "produto";
+    div.innerHTML = `
+      <strong>${produto.nome}</strong><br>
+      ${produto.preco} AKZ
+    `;
+    container.appendChild(div);
+  });
+}
+
+carregarProdutos();
+
+</script>
+
+</body>
+</html>
