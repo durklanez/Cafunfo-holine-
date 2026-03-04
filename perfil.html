@@ -1,122 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Perfil</title>
+<title>Perfil - Cafunfo</title>
 
 <style>
 body{
+  font-family: Arial;
+  background:#f2f2f2;
+  padding:20px;
   margin:0;
-  font-family:Arial;
-  background:#f0f2f5;
 }
 
-.topo{
-  background:#1877f2;
-  color:white;
-  padding:25px;
+.perfil{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.1);
   text-align:center;
+}
+
+img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #22c55e;
+}
+
+button{
+  padding:8px 12px;
+  margin:5px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.editar{
+  background:#3b82f6;
+  color:white;
 }
 
 .foto{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  border:4px solid white;
-  margin-top:-55px;
-  object-fit:cover;
-  background:white;
-}
-
-.info{
-  text-align:center;
-  padding:10px;
-}
-
-.post{
-  background:white;
-  margin:10px;
-  padding:12px;
-  border-radius:8px;
-  box-shadow:0 2px 4px rgba(0,0,0,0.1);
-}
-
-.post img{
-  width:100%;
-  border-radius:8px;
-  margin-bottom:8px;
-}
-
-.botao{
-  width:90%;
-  margin:10px auto;
-  display:block;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:#1877f2;
+  background:#22c55e;
   color:white;
+}
+
+.voltar{
+  background:#6b7280;
+  color:white;
+  margin-top:15px;
+}
+
+.produtos{
+  margin-top:20px;
 }
 </style>
 </head>
 <body>
 
-<div class="topo">
-  <h2 id="nome"></h2>
-</div>
+<div class="perfil">
 
-<div style="text-align:center;">
-  <img id="fotoPerfil" class="foto">
-</div>
+  <img id="fotoPerfil" src="https://via.placeholder.com/120">
 
-<div class="info">
+  <h2 id="nomePerfil">Sem Nome</h2>
+
   <p><strong>Apelido:</strong> <span id="apelido"></span></p>
   <p><strong>Província:</strong> <span id="provincia"></span></p>
   <p><strong>Bairro:</strong> <span id="bairro"></span></p>
   <p><strong>Função:</strong> <span id="funcao"></span></p>
+
+  <button class="editar" onclick="editarNome()">Editar Nome</button>
+  <button class="foto" onclick="document.getElementById('inputFoto').click()">Carregar Foto</button>
+
+  <input type="file" id="inputFoto" accept="image/*" style="display:none" onchange="carregarFoto(event)">
+
+  <br>
+  <button class="voltar" onclick="history.back()">⬅ Voltar ao Menu</button>
+
 </div>
 
-<button class="botao" onclick="voltar()">⬅ Voltar ao Menu</button>
-
-<h3 style="padding-left:10px;">Meus Produtos</h3>
-<div id="lista"></div>
+<div class="produtos">
+  <h3>Meus Produtos</h3>
+  <div id="listaProdutos"></div>
+</div>
 
 <script>
+// Carregar dados salvos
+let usuario = JSON.parse(localStorage.getItem("usuario")) || {};
 
-let user = JSON.parse(localStorage.getItem("user"));
-let perfil = JSON.parse(localStorage.getItem("perfil"));
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+document.getElementById("nomePerfil").innerText = usuario.nome || "Sem Nome";
+document.getElementById("apelido").innerText = usuario.apelido || "";
+document.getElementById("provincia").innerText = usuario.provincia || "";
+document.getElementById("bairro").innerText = usuario.bairro || "";
+document.getElementById("funcao").innerText = usuario.funcao || "";
 
-if(user){
-  document.getElementById("nome").innerText = user.nomeCompleto;
+if(usuario.foto){
+  document.getElementById("fotoPerfil").src = usuario.foto;
 }
 
-if(perfil){
-  document.getElementById("apelido").innerText = perfil.apelido || "-";
-  document.getElementById("provincia").innerText = perfil.provincia || "-";
-  document.getElementById("bairro").innerText = perfil.bairro || "-";
-  document.getElementById("funcao").innerText = perfil.funcao || "-";
-  document.getElementById("fotoPerfil").src = perfil.foto || "https://via.placeholder.com/110";
-}
-
-produtos.forEach(p=>{
-  if(user && p.dono === user.nomeCompleto){
-    document.getElementById("lista").innerHTML += `
-      <div class="post">
-        <img src="${p.foto || 'https://via.placeholder.com/300'}">
-        <h4>${p.nome || "Sem nome"}</h4>
-        <p>${p.descricao || ""}</p>
-        <strong>${p.preco || "Sem preço"}</strong>
-      </div>
-    `;
+// Editar nome
+function editarNome(){
+  let novoNome = prompt("Digite seu novo nome:");
+  if(novoNome){
+    usuario.nome = novoNome;
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    document.getElementById("nomePerfil").innerText = novoNome;
   }
-});
-
-function voltar(){
-  window.location.href="menu.html";
 }
 
+// Carregar foto
+function carregarFoto(event){
+  let reader = new FileReader();
+  reader.onload = function(){
+    usuario.foto = reader.result;
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    document.getElementById("fotoPerfil").src = reader.result;
+  }
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+// Mostrar produtos do usuário
+function carregarProdutos(){
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  let container = document.getElementById("listaProdutos");
+  container.innerHTML = "";
+
+  produtos.forEach(produto=>{
+    let div = document.createElement("div");
+    div.innerHTML = `
+      <p><strong>${produto.nome}</strong></p>
+      <p>${produto.preco} AKZ</p>
+      <hr>
+    `;
+    container.appendChild(div);
+  });
+}
+
+carregarProdutos();
 </script>
 
 </body>
