@@ -70,6 +70,16 @@ button{
   border-radius:8px;
   margin-bottom:10px;
   border:1px solid #ddd;
+  display:flex;
+  align-items:center;
+}
+
+.produto img{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-right:10px;
 }
 </style>
 </head>
@@ -104,7 +114,6 @@ button{
 </div>
 
 <script>
-
 // Carregar nome salvo
 let nomeSalvo = localStorage.getItem("nomeUsuario");
 if(nomeSalvo){
@@ -136,7 +145,7 @@ function carregarFoto(event){
   reader.readAsDataURL(event.target.files[0]);
 }
 
-// Mostrar produtos
+// Mostrar produtos com foto
 function carregarProdutos(){
   let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
   let container = document.getElementById("listaProdutos");
@@ -147,19 +156,21 @@ function carregarProdutos(){
     return;
   }
 
-  produtos.forEach(produto=>{
+  produtos.forEach(produto => {
     let div = document.createElement("div");
     div.className = "produto";
     div.innerHTML = `
-      <strong>${produto.nome}</strong><br>
-      ${produto.preco} AKZ
+      <img src="${produto.foto || 'https://via.placeholder.com/100'}" alt="${produto.nome}">
+      <div>
+        <strong>${produto.nome}</strong><br>
+        ${produto.preco ? produto.preco + " AKZ" : "Preço não definido"}
+      </div>
     `;
     container.appendChild(div);
   });
 }
 
 carregarProdutos();
-
 </script>
 
 </body>
