@@ -5,179 +5,186 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mercado - Cafunfo</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
 <style>
-body {
-  font-family: Arial;
-  background: #f2f2f2;
-  padding: 15px;
-  margin: 0;
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+margin:0;
+padding:10px;
 }
 
-.card {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+h1{
+text-align:center;
 }
 
-img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+.produto{
+
+background:white;
+border-radius:10px;
+padding:10px;
+margin-bottom:10px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-h3 {
-  margin: 10px 0 5px 0;
+.info{
+flex:1;
 }
 
-p {
-  margin: 5px 0;
+.vendedor{
+display:flex;
+align-items:center;
+margin-bottom:5px;
 }
 
-strong {
-  color: green;
-  font-size: 18px;
+.fotoVendedor{
+width:30px;
+height:30px;
+border-radius:50%;
+margin-right:6px;
+cursor:pointer;
 }
 
-button {
-  padding: 10px;
-  width: 100%;
-  background: #22c55e;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+.nomeProduto{
+font-size:16px;
+font-weight:bold;
 }
 
-button:hover {
-  background: #16a34a;
+.preco{
+color:green;
+font-weight:bold;
 }
 
-#map {
-  height: 350px;
-  margin-top: 15px;
-  display: none;
-  border-radius: 12px;
+.descricao{
+font-size:13px;
+color:#555;
 }
 
-#tituloMapa {
-  display: none;
-  text-align: center;
-  font-weight: bold;
-  margin-top: 10px;
+.data{
+font-size:11px;
+color:gray;
 }
+
+.fotoProduto{
+
+width:80px;
+height:80px;
+object-fit:cover;
+border-radius:8px;
+margin-left:10px;
+
+}
+
+button{
+
+margin-top:5px;
+padding:8px 12px;
+border:none;
+background:#22c55e;
+color:white;
+border-radius:6px;
+cursor:pointer;
+
+}
+
 </style>
 </head>
+
 <body>
 
-<h2>🛒 Mercado Cafunfo</h2>
+<h1>Mercado</h1>
+
 <div id="listaProdutos"></div>
 
-<h3 id="tituloMapa">🌍 Localização da Ordem</h3>
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script>
-// Função para carregar produtos
+
 function carregarProdutos(){
-  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-  let container = document.getElementById("listaProdutos");
-  container.innerHTML = "";
 
-  if(produtos.length === 0){
-    container.innerHTML = "<p>Nenhum produto publicado ainda.</p>";
-    return;
-  }
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
-  produtos.forEach((produto, index) => {
-    let card = document.createElement("div");
-    card.className = "card";
+let container = document.getElementById("listaProdutos");
 
-    card.innerHTML = `
-      <img src="${produto.foto || 'https://via.placeholder.com/300x200'}" alt="${produto.nome}">
-      <h3>${produto.nome}</h3>
-      <p>${produto.descricao || ''}</p>
-      <strong>${produto.preco ? produto.preco + " AKZ" : "Preço não definido"}</strong>
-      <button onclick="comprar(${index})">Comprar</button>
-    `;
+container.innerHTML = "";
 
-    container.appendChild(card);
-  });
+if(produtos.length === 0){
+
+container.innerHTML="<p>Nenhum produto publicado</p>";
+
+return;
+
 }
 
-// Função comprar com mapa limitado ao Cafunfo
-function comprar(index){
+/* máximo 5 produtos */
 
-  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+produtos.slice(0,5).forEach(produto=>{
 
-  if(!produtos[index]){
-    alert("Produto não encontrado.");
-    return;
-  }
+let div=document.createElement("div");
 
-  let produto = produtos[index];
+div.className="produto";
 
-  let mapaDiv = document.getElementById("map");
-  let titulo = document.getElementById("tituloMapa");
+div.innerHTML=`
 
-  mapaDiv.style.display = "block";
-  titulo.style.display = "block";
+<div class="info">
 
-  // Limites Cafunfo (exemplo)
-  let cafunfoBounds = [
-    [-8.770, 20.400], // SUL-OESTE
-    [-8.720, 20.470]  // NORTE-LESTE
-  ];
+<div class="vendedor">
 
-  setTimeout(function(){
+<img class="fotoVendedor" src="${produto.fotoVendedor || 'https://via.placeholder.com/30'}"
+onclick="abrirPerfil('${produto.vendedor}')">
 
-    if(window.meuMapa){
-      window.meuMapa.remove();
-    }
+<span>${produto.vendedor}</span>
 
-    let map = L.map('map', {
-      maxBounds: cafunfoBounds,
-      maxBoundsViscosity: 1.0
-    }).setView([produto.vendedorLat || -8.745, produto.vendedorLon || 20.440], 15);
+</div>
 
-    window.meuMapa = map;
+<div class="nomeProduto">${produto.nome}</div>
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
+<div class="preco">${produto.preco} Kz</div>
 
-    // 🔴 Vendedor
-    L.marker([produto.vendedorLat || -8.745, produto.vendedorLon || 20.440])
-      .addTo(map)
-      .bindPopup("📍 Vendedor")
-      .openPopup();
+<div class="descricao">${produto.descricao || ""}</div>
 
-    // 🟢 Comprador
-    if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(function(position){
-        L.marker([position.coords.latitude, position.coords.longitude])
-          .addTo(map)
-          .bindPopup("🟢 Você (Comprador)");
-      }, function(){
-        alert("Permita a localização para mostrar sua posição.");
-      });
-    }
+<div class="data">${produto.data || ""}</div>
 
-    setTimeout(function(){
-      map.invalidateSize();
-    }, 300);
+<button onclick="comprar('${produto.nome}','${produto.vendedor}')">
+Comprar
+</button>
 
-  }, 300);
+</div>
+
+<img class="fotoProduto"
+src="${produto.foto || 'https://via.placeholder.com/80'}">
+
+`;
+
+container.appendChild(div);
+
+});
+
 }
 
-// Carrega produtos assim que abre a página
+function abrirPerfil(nome){
+
+localStorage.setItem("verPerfil",nome);
+
+window.location="ver-perfil.html";
+
+}
+
+function comprar(produto,vendedor){
+
+localStorage.setItem("ordemProduto",produto);
+
+localStorage.setItem("ordemVendedor",vendedor);
+
+window.location="enviar-ordem.html";
+
+}
+
 carregarProdutos();
+
 </script>
 
 </body>
